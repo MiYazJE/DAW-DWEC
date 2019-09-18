@@ -10,7 +10,7 @@
 // function that receives a string, an index and a string that indicates from 
 // where has to cut de string, "from" can be "start" or "end". 
 function mySubstring(str, index, from) {
-    if (str.length == 0) return "";
+    if (!str) return null;
     if (from != "end" && from != "start") {
         throw new Error("'" + from + "' is not expected");
     }
