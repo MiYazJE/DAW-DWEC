@@ -24,22 +24,19 @@ function validarDni(dni) {
 
     var numDni = dni.substring(0, 8);
     var calculoLetra = parseInt(numDni % 23);
-    var letra = abc[calculoLetra];
+    var letraExtraida = abc[calculoLetra];
     
-    console.log(letra);
-    return letra === dni.charAt(dni.length - 1);
+    console.log(letraExtraida);
+    return letraExtraida === dni.charAt(dni.length - 1);
 }
 
 function validarEmail(email) {
-    return (email.length > 12 && email.endsWith("@hotmail.com") && email.indexOf(".") == email.length-4) || 
-           (email.length > 10 && email.endsWith("@gmail.com") && email.indexOf(".") == email.length-4);
+    var regExp = /^[a-zA-Z0-9.!?-]{2,60}\@[a-zA-Z0-9.!?-]{3,15}\.[a-zA-Z0-9.!?-]{2,10}$/g;
+    return (regExp.test(email));
 }
 
 function validarTelefono(telefono) {
-    var isNumber = true;
-    for (let i = 0; i < telefono.length && isNumber; i++) 
-        isNumber = !isNaN(telefono.charAt(i));
-    return isNumber && telefono.length == 9;
+    
 }
 
 function validarIp(direccionIP) {
@@ -55,15 +52,17 @@ function validateUrl(url) {
 }
 
 // LECTURA 
-var dni      = prompt("Introduce un dni");
-// var email    = prompt("Introduce un email");
+// var dni      = prompt("Introduce un dni");
+var email    = prompt("Introduce un email");
 // var telefono = prompt("Introduce un telefono");
 // var ip       = prompt("Introduce una direccion ip");
 // var url      = prompt("Introduce una url valida");
 
 // VALIDACIONES
-document.write( validarDni(dni) ? "El dni es correcto," : "El dni no es correcto.");
-// document.write( validarEmail(email) ? "El email es correcto." : "El email no es correcto");
+document.write("<h1>");
+// document.write( validarDni(dni) ? "El dni es correcto," : "El dni no es correcto.");
+document.write( validarEmail(email) ? "El email es correcto." : "El email no es correcto");
 // document.write( validarTelefono(telefono) ? "El telefono es valido" : "El telefono no es valido" );
 // document.write( validarIp(ip) ? "La direccion ip es valida" : "La direccion ip no es valida" );
 // document.write( validateUrl(url) ? "La url es valida" : "La url no es valida" );
+document.write("</h1>");
