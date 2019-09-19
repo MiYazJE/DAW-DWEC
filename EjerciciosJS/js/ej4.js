@@ -5,7 +5,9 @@
 
 "use strict";
 
-function isDate(date) { return date instanceof Date; }
+function isDate(date) { 
+    return date instanceof Date; 
+}
 
 var fechaDate = new Date();
 var fecha = "10/09/2019";

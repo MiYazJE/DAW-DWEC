@@ -1,16 +1,16 @@
 'use strict';
 
-function esFeliz(n) {
+function esFeliz(n) { 
 
-    if (parseInt(n) == 1) return true;
-    if (parseInt(n / 10) == 0) return false;
+    if (Number(n) == 1) return true;
+    if (Number(n / 10) == 0) return false;
     
     var newNum = 0;
-    while (parseInt(n) !== 0) {
-        var lastNum = parseInt(n % 10);
+    while (parseInt(n) !== 0) { 
+        var lastNum = parseInt(n % 10); 
         // console.log("lastNum: " + lastNum);
-        newNum += parseInt(lastNum * lastNum);
-        n /= 10;
+        newNum += parseInt(lastNum * lastNum); 
+        n /= 10; 
     }
     // console.log("newNum: " + newNum);
     return esFeliz(newNum);
