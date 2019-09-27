@@ -1,6 +1,7 @@
 'use strict';
 
 var errores = [];
+
 const ERROR_NOMBRE = "El nombre solo debe contener carácteres y espacios";
 const ERROR_APELLIDOS = "Los apellidos solo deben contener carácteres y espacios";
 const ERROR_EMAIL = "El email debe de contener este formato 'xxx@xxx.xxx' ";
@@ -9,52 +10,62 @@ const ERROR_PASSWORD = `La contrasña debe contener al menos 1 digito, un carác
                         y debe de ser al menos de 8 caracteres.`;
 const ERROR_PASSWORD_NO_COINCIDE = "Las contraseñas no coinciden.";
 const ERROR_DIRECCION_IP = "La dirección ip debe contener el siguiente formato: 'xxx.xxx.xxx.xxx' y el rango entre 1-253, ambos incluidos.";
+
 let password;
+let compararPasswords = false;
 
 function setBorder(input, color) {
     input.style.border = `1px solid ${color}`;
 }
 
 function validarNombre(input) {
+    if (input.value.length == 0) return;
     if (/^[a-zA-Z\s]{3,20}$/g.test(input.value)) {
         setBorder(input, "green");
+        errores[0] = undefined;
     }
     else {
         setBorder(input, "red");
-        errores.push(ERROR_NOMBRE);
+        errores[0] = ERROR_NOMBRE;
     }
 }
 
 function validarApellidos(input) {
+    if (input.value.length == 0) return;
     if (/^[a-zA-Z\s]{3,40}$/g.test(input.value)) {
         setBorder(input, "green");
+        errores[1] = 'ok';
     }
     else {
         setBorder(input, "red");
-        errores.push(ERROR_APELLIDOS);
+        errores[1] = ERROR_APELLIDOS;
     }
 }
 
 function validarEmail(input) {
+    if (input.value.length == 0) return;
     let regExp = /^[0-9-a-zA-Z.!_~-]{5,30}\@[0-9-a-zA-Z.!_~-]{5,30}\.[a-zA-Z]{2,5}$/g;
     if (regExp.test(input.value)) {
         setBorder(input, "green");
+        errores[2] = 'ok';
     }
     else {
         setBorder(input, "red");
-        errores.push(ERROR_EMAIL);
+        errores[2] = ERROR_EMAIL;
     }
 }
 
 function validarDni(input) {
+    if (input.value.length == 0) return;
     let dni = input.value;
     if (/^[0-9]{8}[a-z]$/gi.test(dni)) {
         setBorder(input, "green");
         input.value = formatearDni(dni);
+        errores[3] = 'ok';
     }
     else {
         setBorder(input, "red");
-        errores.push(ERROR_DNI);
+        errores[3] = ERROR_DNI;
     }
 }
 
@@ -67,34 +78,84 @@ function formatearDni(dni) {
 }
 
 function validarPassword(input) {
-    console.log(password);
-    if (typeof password != 'undefined' && password != input.value) {
+    if (input.value.length == 0) return;
+
+    if (compararPasswords && input.value != password) {
         setBorder(input, 'red');
-        errores.push(ERROR_PASSWORD);
+        errores[4] = ERROR_PASSWORD;
     }
     else if (password == input.value) {
         setBorder(input, 'green');
+        validarPassword = false;
+        errores[4] = undefined;
     }
     else {
         let regExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,100}$/;
         if (regExp.test(input.value)) {
             setBorder(input, "green");
             this.password = input.value;
+            compararPasswords = true;
+            errores[4] = 'ok';
         }
         else {
             setBorder(input, "red");
             errores.push(ERROR_PASSWORD);
+            errores[4] = ERROR_PASSWORD_NO_COINCIDE;
         }
     }
 }
 
 function validarDireccionIp(input) {
+    if (input.value.length == 0) return;
     let regExp = /^((25[0-4]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[1-9])\.){3}(25[0-4]|2[0-4][0-9]|[1-9][0-9]|[1-9])$/igm;
     if (regExp.test(input.value)) {
         setBorder(input, 'green');
+        errores[5] = 'ok';
     }
     else {
         setBorder(input, 'red');
-        errores.push(ERROR_DIRECCION_IP);
+        errores[5] = ERROR_DIRECCION_IP;
     }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const btnSubmit = document.querySelector('input[type="submit"]'); 
+    
+    btnSubmit.addEventListener('click', () => {
+        if (isEmpty(errores)) {
+            alert("Existen campos vacíos, por favor rellenelos.")
+        }
+        else if (!isCorrect(errores)) {
+            let errorsParsed = "";
+
+            for (let error of errores) 
+                if (typeof error != 'undefined' && error != 'ok')    
+                    errorsParsed += error + '\n';
+
+            alert(errorsParsed);
+        }
+        else {
+            alert('El formulario no contiene errores.');
+        }
+    });
+
+});
+
+
+function isCorrect(erroresTest) {
+    for (let error of erroresTest) {
+        if (error != 'ok') {
+            return false;
+        }
+    }
+    return true;
+}
+
+function isEmpty(erroresTest) {
+    for (let error of erroresTest) {
+        if (typeof error != 'undefined' && error != 'ok')
+            return false;
+    }
+    return true;
 }
