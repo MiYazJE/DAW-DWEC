@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Validar formulario</title>
+    <style>
+        @import url('css/estilos.css');
+    </style>
+    <script src="js/validarFormulario.js"></script>
+</head>
+
+<body>
+
+    <form action="#">
+        <h1>Validación del Formulario</h1>
+        <div>
+            <p>Nombre: </p>
+            <input onblur="validarNombre(this)" type="text" placeholder="Introduce tu nombre...">
+        </div>
+        <div>
+            <p>Apellidos: </p>
+            <input onblur="validarApellidos(this)" type="text" placeholder="Introduce tus apellidos...">
+        </div>
+        <div>
+            <p>e-mail: </p>
+            <input onblur="validarEmail(this)" type="text" placeholder="Introduce tu e-mail...">
+        </div>
+        <div>
+            <p>DNI: </p>
+            <input onblur="validarDni(this)" type="text" placeholder="Introduce tu dni..." maxlength="9">
+        </div>
+        <div>
+            <p>Password: </p>
+            <input onblur="validarPassword(this)" type="text">
+        </div>
+        <div>
+            <p>Repetir password: </p>
+            <input onblur="validarPassword(this)" type="text">
+        </div>
+        <div>
+            <p>IP equipo: </p>
+            <input type="text" placeholder="Introduce tu direccion ip">
+        </div>
+        <input type="submit">
+    </form>
+
+</body>
+
+</html>
