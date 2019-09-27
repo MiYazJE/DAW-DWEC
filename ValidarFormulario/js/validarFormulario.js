@@ -82,25 +82,24 @@ function validarPassword(input) {
 
     if (compararPasswords && input.value != password) {
         setBorder(input, 'red');
-        errores[4] = ERROR_PASSWORD;
+        errores[4] = ERROR_PASSWORD_NO_COINCIDE;
     }
-    else if (password == input.value) {
+    else if (compararPasswords && password == input.value) {
         setBorder(input, 'green');
-        validarPassword = false;
+        compararPasswords = false;
         errores[4] = undefined;
     }
     else {
         let regExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,100}$/;
         if (regExp.test(input.value)) {
             setBorder(input, "green");
-            this.password = input.value;
+            password = input.value;
             compararPasswords = true;
             errores[4] = 'ok';
         }
         else {
             setBorder(input, "red");
-            errores.push(ERROR_PASSWORD);
-            errores[4] = ERROR_PASSWORD_NO_COINCIDE;
+            errores[4] = ERROR_PASSWORD;
         }
     }
 }
@@ -118,30 +117,24 @@ function validarDireccionIp(input) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function notificarErrores() {
+    console.log(errores.length);
+    if (isEmpty(errores)) {
+        alert("Existen campos vacíos, por favor rellenalos.")
+    }
+    else if (!isCorrect(errores)) {
+        let errorsParsed = "";
 
-    const btnSubmit = document.querySelector('input[type="submit"]'); 
-    
-    btnSubmit.addEventListener('click', () => {
-        if (isEmpty(errores)) {
-            alert("Existen campos vacíos, por favor rellenelos.")
-        }
-        else if (!isCorrect(errores)) {
-            let errorsParsed = "";
+        for (let error of errores) 
+            if (typeof error != 'undefined' && error != 'ok')    
+                errorsParsed += error + '\n';
 
-            for (let error of errores) 
-                if (typeof error != 'undefined' && error != 'ok')    
-                    errorsParsed += error + '\n';
-
-            alert(errorsParsed);
-        }
-        else {
-            alert('El formulario no contiene errores.');
-        }
-    });
-
-});
-
+        alert(errorsParsed);
+    }
+    else {
+        alert('El formulario no contiene errores.');
+    }
+}
 
 function isCorrect(erroresTest) {
     for (let error of erroresTest) {
