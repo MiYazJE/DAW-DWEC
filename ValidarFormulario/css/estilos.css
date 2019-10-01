@@ -1,3 +1,7 @@
+/*
+    Rubén Saiz Serrano 01/10/2019
+*/
+
 body {
     background: rgb(2,0,36);
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(197,197,231,1) 0%, rgba(10,255,252,1) 51%, rgba(188,192,232,1) 100%, rgba(0,212,255,1) 100%);
@@ -20,7 +24,9 @@ form {
     position: absolute;
     top: 50%; 
     left: 50%; 
+    width: 500px;
     transform: translate(-50%, -50%);
+    box-shadow: 10px 10px 10px -5px;
 }
 
 div {

@@ -1,20 +1,24 @@
+/*
+    Rubén Saiz Serrano 01/10/2019
+*/
+
 'use strict';
 
-var errores = [];
+
+var errores = new Array(6).fill('');
 
 const ERROR_NOMBRE = "El nombre solo debe contener carácteres y espacios";
 const ERROR_APELLIDOS = "Los apellidos solo deben contener carácteres y espacios";
 const ERROR_EMAIL = "El email debe de contener este formato 'xxx@xxx.xxx' ";
 const ERROR_DNI = "El dni debe de contener 8 digitos seguidos de una letra";
-const ERROR_PASSWORD = `La contrasña debe contener al menos 1 digito, un carácter especial, 
-                        y debe de ser al menos de 8 caracteres.`;
+const ERROR_PASSWORD = "La contrasña debe contener al menos 1 digito, un carácter especial, y debe de ser al menos de 8 caracteres.";
 const ERROR_PASSWORD_NO_COINCIDE = "Las contraseñas no coinciden.";
 const ERROR_DIRECCION_IP = "La dirección ip debe contener el siguiente formato: 'xxx.xxx.xxx.xxx' y el rango entre 1-253, ambos incluidos.";
 
 let password;
 let compararPasswords = false;
 
-function setBorder(input, color) {
+function setBorder(input, color) {  
     input.style.border = `1px solid ${color}`;
 }
 
@@ -22,7 +26,7 @@ function validarNombre(input) {
     if (input.value.length == 0) return;
     if (/^[a-zA-Z\s]{3,20}$/g.test(input.value)) {
         setBorder(input, "green");
-        errores[0] = undefined;
+        errores[0] = 'ok';
     }
     else {
         setBorder(input, "red");
@@ -87,7 +91,7 @@ function validarPassword(input) {
     else if (compararPasswords && password == input.value) {
         setBorder(input, 'green');
         compararPasswords = false;
-        errores[4] = undefined;
+        errores[4] = 'ok';
     }
     else {
         let regExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,100}$/;
@@ -118,37 +122,40 @@ function validarDireccionIp(input) {
 }
 
 function notificarErrores() {
-    console.log(errores.length);
-    if (isEmpty(errores)) {
-        alert("Existen campos vacíos, por favor rellenalos.")
-    }
-    else if (!isCorrect(errores)) {
+    console.log(errores);
+    if (!isCorrect(errores)) {
+        console.log(errores);
+        console.log("Existen errores");
         let errorsParsed = "";
-
+        
         for (let error of errores) 
-            if (typeof error != 'undefined' && error != 'ok')    
+            if (error != 'ok' && error != '')    
                 errorsParsed += error + '\n';
-
+        
         alert(errorsParsed);
+    }
+    else if (isEmpty(errores)) {
+        console.log("Existen campos vacios");
+        alert("Existen campos vacíos, por favor rellenalos.")
     }
     else {
         alert('El formulario no contiene errores.');
     }
 }
 
-function isCorrect(erroresTest) {
-    for (let error of erroresTest) {
-        if (error != 'ok') {
+function isCorrect(errores) {
+    for (let error of errores) {
+        if (error != 'ok' && error.length != 0) {
             return false;
         }
     }
     return true;
 }
 
-function isEmpty(erroresTest) {
-    for (let error of erroresTest) {
-        if (typeof error != 'undefined' && error != 'ok')
-            return false;
+function isEmpty(errores) {
+    for (let error of errores) {
+        if (error.length == 0)
+            return true;
     }
-    return true;
+    return false;
 }
