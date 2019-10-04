@@ -1,0 +1,50 @@
+.main-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.cajaPadre {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 310px; 
+    height: 310px;
+    margin: 1em;
+}
+
+button {
+    margin-top: 1em;
+}
+
+.caja {
+    width: 300px;
+    height: 300px;
+}
+
+.sombra {
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+    transition: 3;
+}
+
+.sombraInterior {
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75) inset;
+    transition: 3;
+}
+
+.red {
+    background-color: red;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: green;
+}
+
+.black {
+    background-color: black;
+}

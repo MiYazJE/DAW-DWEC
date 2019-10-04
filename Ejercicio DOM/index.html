@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio DOM</title>
+    <script src="js/main.js"></script>
+    <style>
+        @import url('css/estilos.css');
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+
+        <div class="cajaPadre">
+            <div class="caja red sombra" onclick="quitarSombra(this)" ondblclick="aplicarSombrasInteriores(this)" onmouseover="aplicarHover(this)" onmouseout="removeHover(this)">
+            </div>
+            <button onclick="eliminarNodo(this)">Eliminar</button>
+        </div>
+
+        <div class="cajaPadre">
+            <div class="caja blue sombra" onclick="quitarSombra(this)" ondblclick="aplicarSombrasInteriores(this)" onmouseover="aplicarHover(this)" onmouseout="removeHover(this)">
+            </div>
+            <button onclick="eliminarNodo(this)">Eliminar</button>
+        </div>
+
+        <div class="cajaPadre">
+            <div class="caja green sombra" onclick="quitarSombra(this)" ondblclick="aplicarSombrasInteriores(this)" onmouseover="aplicarHover(this)" onmouseout="removeHover(this)">
+            </div>
+            <button onclick="eliminarNodo(this)">Eliminar</button>
+        </div>
+
+        <div class="cajaPadre">
+            <div class="caja black sombra" onclick="quitarSombra(this)" ondblclick="aplicarSombrasInteriores(this)" onmouseover="aplicarHover(this)" onmouseout="removeHover(this)">
+            </div>
+            <button onclick="eliminarNodo(this)">Eliminar</button>
+        </div>
+
+    </div>
+    
+</body>
+</html>
