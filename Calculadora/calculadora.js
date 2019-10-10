@@ -42,9 +42,20 @@ window.addEventListener('load', () => {
                 );
             }
         }
-        
     });
 
+    document.querySelector('.resultado').addEventListener('click', () => {
+        if (!vacio) {
+            let inputText = document.querySelector("input[type='text']");
+            let evaluar = inputText.value;
+            try {   
+                let res = eval(evaluar);
+                inputText.value = res;
+            } catch (error) {
+                
+            }
+        }
+    });
 
 });
 
