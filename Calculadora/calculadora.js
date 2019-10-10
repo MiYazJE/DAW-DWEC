@@ -63,25 +63,33 @@ function eliminarSombra(boton) {
 
 function aplicarEventoInsertarNumero(boton) {
     boton.addEventListener('click', () => {
-        let inputText = document.querySelector("input[type='text']");
-        if (vacio) {
-            inputText.value = '';
-            vacio = false;
-        }
-        inputText.value = inputText.value + boton.innerHTML.trim();
-        simbolo = decimal = false;
+        insertarNumero(boton.innerHTML.trim());
     });
+}
+
+function insertarNumero(texto) {
+    let inputText = document.querySelector("input[type='text']");
+    if (vacio) {
+        inputText.value = '';
+        vacio = false;
+    }
+    inputText.value = inputText.value + texto;
+    simbolo = decimal = false;
 }
 
 function aplicarEventoInsertarOperacion(boton) {
     boton.addEventListener('click', () => {
-        // Si hay ya un simbolo de operacion o hay un decimal mal escrito(0.) no dejamos insertar nada 
-        if (!simbolo && !vacio && !decimal) {
-            let inputText = document.querySelector("input[type='text']");
-            inputText.value = inputText.value + ' ' + boton.innerHTML.trim() + ' ';
-            simbolo = true;
-        }
+       insertarOperacion(boton.innerHTML.trim());
     });
+}
+
+function insertarOperacion(operando) {
+     // Si hay ya un simbolo de operacion o hay un decimal mal escrito(0.) no dejamos insertar nada 
+     if (!simbolo && !vacio && !decimal) {
+        let inputText = document.querySelector("input[type='text']");
+        inputText.value = inputText.value + ' ' + operando + ' ';
+        simbolo = true;
+    }
 }
 
 function borrarTodo() {
@@ -152,63 +160,29 @@ function insertarParentesis() {
 */
 
 document.addEventListener('keydown', (key) => {
-    console.log(key);
-    console.log(key.key);
+
     let inputText = document.querySelector("input[type='text']");
     if (/^[0-9]$/.test(key.key)) {
-        if (vacio) {
-            inputText.value = '';
-            vacio = false;
-        }
-        inputText.value = inputText.value + key.key;
-        simbolo = decimal = false;
+        insertarNumero(key.key);
     }
     else if (/^[\/\*\%\-\+]$/.test(key.key)) {
-        if (!simbolo && !vacio && !decimal) {
-            inputText.value = inputText.value + ' ' + key.key + ' ';
-            simbolo = true;
-        }
+        let op = (key.key == '*') ? 'x' : key.key;
+        insertarOperacion(op);
     }
     else if (key.key == 'Enter') {
-        if (!vacio) {
-            let evaluar = inputText.value;
-            try {   
-                let res = eval(evaluar.replace('x', '*'));
-                inputText.value = res;
-            } catch (error) {
-                // nothing
-            }
-        }
+        calcularResultado();
     }
     else if (key.key == 'Backspace') {
-        if (!vacio) {
-            let inputText = document.querySelector("input[type='text']");
-            if (inputText.value.length == 1) {
-                inputText.value = '0';
-                vacio = true;
-            }
-            else {
-                // Si el ultimo caracter es un espacio eliminar 2 caracteres
-                // Esto pasa porque cuando introduzco un operando doy un espacio por estetica :)
-                if (inputText.value[inputText.value.length - 1] == ' ') {
-                    inputText.value = inputText.value.substring(
-                        0, inputText.value.length - 2
-                    );
-                    if (inputText.value.length == 0) inputText.value = '0';
-                }
-                else {
-                    inputText.value = inputText.value.substring(
-                        0, inputText.value.length - 1
-                    );
-                }
-            }
-        }
+        eliminarUltimoCaracter();
     }
     else if (key.key == ')' || key.key == '(') {
-        if (!vacio && !decimal && !simbolo) {
-            let inputText = document.querySelector("input[type='text']");
-            inputText.value = '(' + inputText.value + ')';
-        }
+        insertarParentesis();
+    }
+    else if (key.key == '.') {
+        insertarDecimales();
+    }
+    else if (key.key == 'Escape') {
+        borrarTodo();
     }
 
 });
