@@ -1,6 +1,7 @@
 let isEmpty   = true;
 let hayOperando = false;
 let hayDecimal = false;
+let valid = false;
 let concatenarResultado = false;
 
 window.addEventListener('load', () => {
@@ -75,8 +76,10 @@ function insertarNumero(texto) {
         isEmpty = false;
         concatenarResultado = false;
     }
-    inputText.value = inputText.value + texto;
-    hayOperando = hayDecimal = false;
+    if(hayOperando) texto = ' ' + texto;
+    inputText.value = inputText.value.trim() + texto;
+    hayOperando = false;
+    valid = true;
 }
 
 function aplicarEventoInsertarOperacion(boton) {
@@ -87,12 +90,11 @@ function aplicarEventoInsertarOperacion(boton) {
 
 function insertarOperacion(operando) {
      // Si hay ya un hayOperando de operacion o hay un hayDecimal mal escrito(0.) no dejamos insertar nada 
-     if (!hayOperando && !isEmpty && !hayDecimal) {
+     if (!hayOperando && !isEmpty && (!hayDecimal || valid)) {
         let inputText = document.querySelector("input[type='text']");
-        inputText.value = inputText.value + ' ' + operando + ' ';
+        inputText.value = inputText.value.trim() + ' ' + operando + ' ';
         hayOperando = true;
-        concatenarResultado = false;
-        hayDecimal = false;
+        concatenarResultado = valid = hayDecimal = false;
     }
 }
 
@@ -131,10 +133,9 @@ function eliminarUltimoCaracter() {
             }
             if (eliminado.includes(')')) inputText.value = inputText.value.substring(1);
             else if (eliminado.includes('.')) hayDecimal = false;
-            else {
-                try {
-                    parseInt(eliminado);
-                } catch (err) { hayOperando = false; }
+            else if (!/^[0-9]$/.test(eliminado.trim())) {
+                console.log(eliminado);
+                if (inputText.value.length != 1) hayOperando = false; 
             }
         }
     }
@@ -148,8 +149,7 @@ function calcularResultado() {
             let res = eval(evaluar.replace('x', '*'));
             inputText.value = res;
             concatenarResultado = true;
-            hayOperando = false;
-            hayDecimal = false;
+            hayOperando = hayDecimal = false;
         } catch (error) {
             // nothing
         }
@@ -157,11 +157,11 @@ function calcularResultado() {
 }
 
 function insertarDecimales() {
-    if (!hayDecimal) {
+    if (!hayDecimal && !hayOperando) {
         let inputText = document.querySelector("input[type='text']");
         inputText.value = inputText.value + '.';
         hayDecimal = true;
-        isEmpty = false;
+        isEmpty = concatenarResultado = hayOperando = false;
     }
 }
 
