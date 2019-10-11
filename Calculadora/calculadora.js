@@ -1,6 +1,7 @@
-let vacio   = true;
-let simbolo = false;
-let decimal = false;
+let isEmpty   = true;
+let hayOperando = false;
+let hayDecimal = false;
+let concatenarResultado = false;
 
 window.addEventListener('load', () => {
 
@@ -36,7 +37,7 @@ window.addEventListener('load', () => {
         calcularResultado();
     });
 
-    // Insertar decimales
+    // Insertar hayDecimales
     document.querySelector('.decimal').addEventListener('click', () => {
         insertarDecimales();
     });
@@ -69,12 +70,13 @@ function aplicarEventoInsertarNumero(boton) {
 
 function insertarNumero(texto) {
     let inputText = document.querySelector("input[type='text']");
-    if (vacio) {
+    if (isEmpty || concatenarResultado) {
         inputText.value = '';
-        vacio = false;
+        isEmpty = false;
+        concatenarResultado = false;
     }
     inputText.value = inputText.value + texto;
-    simbolo = decimal = false;
+    hayOperando = hayDecimal = false;
 }
 
 function aplicarEventoInsertarOperacion(boton) {
@@ -84,53 +86,70 @@ function aplicarEventoInsertarOperacion(boton) {
 }
 
 function insertarOperacion(operando) {
-     // Si hay ya un simbolo de operacion o hay un decimal mal escrito(0.) no dejamos insertar nada 
-     if (!simbolo && !vacio && !decimal) {
+     // Si hay ya un hayOperando de operacion o hay un hayDecimal mal escrito(0.) no dejamos insertar nada 
+     if (!hayOperando && !isEmpty && !hayDecimal) {
         let inputText = document.querySelector("input[type='text']");
         inputText.value = inputText.value + ' ' + operando + ' ';
-        simbolo = true;
+        hayOperando = true;
+        concatenarResultado = false;
+        hayDecimal = false;
     }
 }
 
 function borrarTodo() {
-    if (!vacio) {
+    if (!isEmpty) {
         document.querySelector("input[type='text']").value = '0';
-        vacio = true;
+        isEmpty = true;
+        hayDecimal = hayOperando = false;
     }
 }
 
 function eliminarUltimoCaracter() {
-    if (!vacio) {
+    if (!isEmpty) {
         let inputText = document.querySelector("input[type='text']");
         if (inputText.value.length == 1) {
             inputText.value = '0';
-            vacio = true;
+            isEmpty = true;
+            hayOperando = hayDecimal = concatenarResultado = false;
         }
         else {
             // Si el ultimo caracter es un espacio eliminar 2 caracteres
             // Esto pasa porque cuando introduzco un operando doy un espacio por estetica :)
+            let eliminado;
             if (inputText.value[inputText.value.length - 1] == ' ') {
+                eliminado = inputText.value.substring(inputText.value.length - 2);
                 inputText.value = inputText.value.substring(
                     0, inputText.value.length - 2
                 );
                 if (inputText.value.length == 0) inputText.value = '0';
             }
             else {
+                eliminado = inputText.value.substring(inputText.value.length-1);
                 inputText.value = inputText.value.substring(
                     0, inputText.value.length - 1
                 );
+            }
+            if (eliminado.includes(')')) inputText.value = inputText.value.substring(1);
+            else if (eliminado.includes('.')) hayDecimal = false;
+            else {
+                try {
+                    parseInt(eliminado);
+                } catch (err) { hayOperando = false; }
             }
         }
     }
 }
 
 function calcularResultado() {
-    if (!vacio) {
+    if (!isEmpty) {
         let inputText = document.querySelector("input[type='text']");
         let evaluar = inputText.value;
         try {   
             let res = eval(evaluar.replace('x', '*'));
             inputText.value = res;
+            concatenarResultado = true;
+            hayOperando = false;
+            hayDecimal = false;
         } catch (error) {
             // nothing
         }
@@ -138,16 +157,16 @@ function calcularResultado() {
 }
 
 function insertarDecimales() {
-    if (!decimal) {
+    if (!hayDecimal) {
         let inputText = document.querySelector("input[type='text']");
         inputText.value = inputText.value + '.';
-        decimal = true;
-        vacio = false;
+        hayDecimal = true;
+        isEmpty = false;
     }
 }
 
 function insertarParentesis() {
-    if (!vacio && !decimal && !simbolo) {
+    if (!isEmpty && !hayDecimal && !hayOperando) {
         let inputText = document.querySelector("input[type='text']");
         inputText.value = '(' + inputText.value + ')';
     }
