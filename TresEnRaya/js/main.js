@@ -101,20 +101,24 @@ function indicarGanador() {
 function aplicarEventos(caja) {
     caja.addEventListener('click', () => {
         if (ganador == '') {
-            caja.style.backgroundColor = colorPlayer;
             let pos = devolverPosicion(caja);
-            tablero[parseInt(pos/3)][parseInt(pos%3)] = 'player1';
-    
-            if (comprobarTablero()) indicarGanador();
-        }
+            if (tablero[parseInt(pos/3)][parseInt(pos%3)] == '') {
+                // turno player
+                tablero[parseInt(pos/3)][parseInt(pos%3)] = 'player1';
+                caja.style.backgroundColor = colorPlayer;
+                caja.style.cursor = 'default';
+                if (comprobarTablero()) indicarGanador();
 
-        if (ganador == '') {
-            setTimeout(() => {
-                turnoCpu(caja);
-            }, 1000);
-            if (comprobarTablero()) indicarGanador();
+                // turno cpu
+                if (ganador == '') {
+                    setTimeout(() => {
+                        turnoCpu(caja);
+                    }, 1000);
+                    if (comprobarTablero()) indicarGanador();
+                }
+                else if (ganador == '' && comprobarEmpate()) anunciarEmpate();
+            }
         }
-
     });
 }
 
@@ -124,15 +128,34 @@ function turnoCpu(caja) {
         if (tablero[parseInt(rnd/3)][parseInt(rnd%3)] == '') {
             tablero[parseInt(rnd/3)][parseInt(rnd%3)] = 'maquina';
             caja.parentElement.children[rnd].style.backgroundColor = colorMaquina;
+            caja.style.cursor = 'default';
             break;
         }
     }
 }
 
+// devuelve la posicion en la que se encuentra el div presionado
 function devolverPosicion(caja) {
     let parent = caja.parentElement.children;
     for (let i = 0; i < parent.length; i++) 
-        if (caja == parent[i]) {
+        if (caja == parent[i]) 
             return i;
-        }
+        
+}
+
+function comprobarEmpate() {
+    let empate = true;
+
+    for (let i = 0; i < 3 && empate; i++) 
+        for (let j = 0; j < 3 && empate; j++) 
+            empate = (tablero[i][j] != '');
+
+    return empate;
+}
+
+function anunciarEmpate() {
+    let cajaGanador = document.querySelector('.cajaGanador');
+    let h1 = document.createElement('h1');
+    h1.appendChild(document.createTextNode('Se ha producido un empate!'));
+    cajaGanador.appendChild(h1);
 }
