@@ -50,10 +50,10 @@ function comprobarFilas(player) {
     for (let i = 0; i < 3; i++) {
         filas = true;
         for (let j = 0; j < 3 && filas; j++) {
-            filas = (tablero[j][i] == player);
+            filas = (tablero[i][j] == player);
         }
         if (filas) {
-            ganador = tablero[i][2];
+            ganador = tablero[i][0];
             return true;
         }
     }
@@ -65,10 +65,10 @@ function comprobarColumnas(player) {
     for (let i = 0; i < 3; i++) {
         columnas = true;
         for (let j = 0; j < 3 && columnas; j++) {
-            columnas = (tablero[i][j] == player);
+            columnas = (tablero[j][i] == player);
         }
         if (columnas) {
-            ganador = tablero[i][2];
+            ganador = tablero[i][0];
             return true;
         }
     }
@@ -113,8 +113,8 @@ function aplicarEventos(caja) {
                 if (ganador == '') {
                     setTimeout(() => {
                         turnoCpu(caja);
+                        if (comprobarTablero()) indicarGanador();
                     }, 1000);
-                    if (comprobarTablero()) indicarGanador();
                 }
                 else if (ganador == '' && comprobarEmpate()) anunciarEmpate();
             }
