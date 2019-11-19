@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+body {
+    background-image: url(/media/spain.jpg);
+    background-position: center;
+    background-size: cover;
+}
+
 main {
     margin: 0px 10% 0px 10%;
     height: 100vh;
@@ -56,9 +62,11 @@ video {
 
 .buttons {
     display: flex;
-    flex-direction: row;
     height: 100%;
-    margin-left: 10px;
+}
+
+.press:active {
+    transform: translateY(5px);
 }
 
 .buttons button {
@@ -69,7 +77,8 @@ video {
     outline: 0;
     width: 30px;
     height: 100%;
-    font-size: 40px;
+    font-size: 30px;
+    margin: 0px 10px;
 }
 
 .animation {
@@ -93,4 +102,12 @@ video {
     width: 100%;
     height: 100%;
     background-color: red;
+}
+
+.wrap-time {
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
 }
