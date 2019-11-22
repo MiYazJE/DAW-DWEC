@@ -9,6 +9,16 @@ let btnMute       = document.querySelector('.btn-mute');
 let btnVolumeUp   = document.querySelector('.btn-volume-up');
 let btnVolumeDown = document.querySelector('.btn-volume-down');
 let textTime      = document.querySelector('.time');
+let currentBar    = document.querySelector('.current');
+let maxWidthBar   = document.querySelector('.wrap-current').offsetWidth;
+
+document.querySelectorAll('.video-recomendado').forEach(videoClick => {
+    videoClick.addEventListener('click', () => {
+        video.src = videoClick.src;
+        btnPlayPause.setAttribute('state', 'play');
+        playPause();
+    })
+})
 
 let eventDisplayControls;
 let muted = false;
@@ -89,6 +99,9 @@ function muteVideo() {
 
 video.ontimeupdate = () => {
     textTime.innerHTML = getParseCurrentTime(video.currentTime) + '/' + getParseCurrentTime(video.duration);
+    // console.log("(" + maxWidthBar + " * " + video.currentTime + ") / " + video.duration);
+    let newWidth = parseInt(parseInt(maxWidthBar * video.currentTime) / video.duration);
+    currentBar.style.width = `${newWidth}px`;
 }
 
 const getParseCurrentTime = (time) => {
