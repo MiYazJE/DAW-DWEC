@@ -59,7 +59,9 @@ video {
 }
 
 .buttons {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     height: 100%;
 }
 
@@ -108,4 +110,8 @@ video {
     justify-content: center;
     align-items: center;
     color: white;
+}
+
+.btn-fullscreen {
+    align-self: flex-end;
 }

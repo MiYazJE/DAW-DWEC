@@ -20,6 +20,8 @@ document.querySelectorAll('.video-recomendado').forEach(videoClick => {
     })
 })
 
+document.querySelector('.btn-fullscreen').addEventListener('click', () => video.requestFullscreen());
+
 let eventDisplayControls;
 let muted = false;
 let lastVolume;
@@ -36,6 +38,9 @@ video.addEventListener('mouseleave', () => {
         wrapControls.style.transform = 'translateY(100%)';
     }, 8000)
 })
+
+// Evento doble click, entrar en fullscreen
+video.addEventListener('dblclick', () => video.requestFullscreen());
 
 // EVENTOS CONTROLES
 btnPlayPause.addEventListener('click', playPause);
