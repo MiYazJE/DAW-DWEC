@@ -10,21 +10,25 @@ let btnVolumeUp   = document.querySelector('.btn-volume-up');
 let btnVolumeDown = document.querySelector('.btn-volume-down');
 let textTime      = document.querySelector('.time');
 let currentBar    = document.querySelector('.current');
-let maxWidthBar   = document.querySelector('.wrap-current').offsetWidth;
 
+let maxWidthBar = video.offsetWidth
+let eventDisplayControls;
+let muted = false;
+let lastVolume;
+
+// Seleccion de videos
 document.querySelectorAll('.video-recomendado').forEach(videoClick => {
     videoClick.addEventListener('click', () => {
+
         video.src = videoClick.src;
         btnPlayPause.setAttribute('state', 'play');
+
         playPause();
     })
 })
 
+// Abrir pantalla completa
 document.querySelector('.btn-fullscreen').addEventListener('click', () => video.requestFullscreen());
-
-let eventDisplayControls;
-let muted = false;
-let lastVolume;
 
 // Mostrar los controles cuando se pase el raton por encima del video
 video.addEventListener('mouseover', () => {
@@ -36,11 +40,21 @@ video.addEventListener('mouseover', () => {
 video.addEventListener('mouseleave', () => {
     eventDisplayControls = setTimeout(() => {
         wrapControls.style.transform = 'translateY(100%)';
-    }, 8000)
+    }, 80000)
 })
 
 // Evento doble click, entrar en fullscreen
 video.addEventListener('dblclick', () => video.requestFullscreen());
+
+// Avanzar y retrasar el video al presionar la barra de progreso
+document.querySelector('.wrap-current').addEventListener('click', eventProgressBar);
+
+function eventProgressBar() {
+    console.log(event.layerX);
+    currentBar.style.width = `${event.layerX}px`;
+    let currentTime = (video.duration * event.layerX) / maxWidthBar;
+    video.currentTime = currentTime;
+}
 
 // EVENTOS CONTROLES
 btnPlayPause.addEventListener('click', playPause);
@@ -49,12 +63,8 @@ btnForward.addEventListener('click', forwardVideo);
 btnBackward.addEventListener('click', backwardVideo);
 btnRefresh.addEventListener('click', refreshVideo)
 btnMute.addEventListener('click', muteVideo);
-btnVolumeUp.addEventListener('click', () => {
-    if (video.volume <= 0.9) video.volume += 0.1;
-});
-btnVolumeDown.addEventListener('click', () => {
-    if (video.volume >= 0.1) video.volume -= 0.1;
-});
+btnVolumeUp.addEventListener('click', volumeUp);
+btnVolumeDown.addEventListener('click', volumeDown);
 
 function playPause() {
     
@@ -102,10 +112,17 @@ function muteVideo() {
     muted = !muted;
 }
 
+function volumeUp() {
+    if (video.volume <= 0.9) video.volume += 0.1;
+}
+
+function volumeDown() {
+    if (video.volume >= 0.1) video.volume -= 0.1;
+}
+
 video.ontimeupdate = () => {
     textTime.innerHTML = getParseCurrentTime(video.currentTime) + '/' + getParseCurrentTime(video.duration);
-    // console.log("(" + maxWidthBar + " * " + video.currentTime + ") / " + video.duration);
-    let newWidth = parseInt(parseInt(maxWidthBar * video.currentTime) / video.duration);
+    let newWidth = (maxWidthBar * video.currentTime) / video.duration;
     currentBar.style.width = `${newWidth}px`;
 }
 
