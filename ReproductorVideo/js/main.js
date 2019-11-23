@@ -15,6 +15,7 @@ let maxWidthBar = video.offsetWidth
 let eventDisplayControls;
 let muted = false;
 let lastVolume;
+let mouseDown = false;
 
 // Seleccion de videos
 document.querySelectorAll('.video-recomendado').forEach(videoClick => {
@@ -40,20 +41,33 @@ video.addEventListener('mouseover', () => {
 video.addEventListener('mouseleave', () => {
     eventDisplayControls = setTimeout(() => {
         wrapControls.style.transform = 'translateY(100%)';
-    }, 80000)
+    }, 8000)
 })
 
 // Evento doble click, entrar en fullscreen
 video.addEventListener('dblclick', () => video.requestFullscreen());
 
-// Avanzar y retrasar el video al presionar la barra de progreso
-document.querySelector('.wrap-current').addEventListener('click', eventProgressBar);
+// Evento avanzar y atrasar el video con eventos click, y drag
+setEventsProgressBar(); 
+
+function setEventsProgressBar() {
+    let wrapCurrent = document.querySelector('.wrap-current');
+    wrapCurrent.addEventListener('click', () => {
+        eventProgressBar()
+        mouseDown = false;
+    })
+    wrapCurrent.addEventListener('mousedown', () => mouseDown = true);
+    window.addEventListener('mouseup', () => mouseDown = false);
+    wrapCurrent.addEventListener('mousemove', () => {
+        if (mouseDown) eventProgressBar();
+    })
+}
 
 function eventProgressBar() {
-    console.log(event.layerX);
     currentBar.style.width = `${event.layerX}px`;
     let currentTime = (video.duration * event.layerX) / maxWidthBar;
     video.currentTime = currentTime;
+    video.play();
 }
 
 // EVENTOS CONTROLES
@@ -142,3 +156,4 @@ const getParseCurrentTime = (time) => {
 
     return mins + ':' + secs;
 }
+
