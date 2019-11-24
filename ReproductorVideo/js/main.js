@@ -11,7 +11,6 @@ let btnVolumeDown = document.querySelector('.btn-volume-down');
 let textTime      = document.querySelector('.time');
 let currentBar    = document.querySelector('.current');
 
-let maxWidthBar = video.offsetWidth
 let eventDisplayControls;
 let muted = false;
 let lastVolume;
@@ -64,10 +63,11 @@ function setEventsProgressBar() {
 }
 
 function eventProgressBar() {
+    let timeDuration = (video.duration * event.layerX) / video.offsetWidth;
     currentBar.style.width = `${event.layerX}px`;
-    let currentTime = (video.duration * event.layerX) / maxWidthBar;
-    video.currentTime = currentTime;
-    video.play();
+    video.currentTime = timeDuration;
+    btnPlayPause.setAttribute('state', 'play');
+    playPause();
 }
 
 // EVENTOS CONTROLES
@@ -136,8 +136,8 @@ function volumeDown() {
 
 video.ontimeupdate = () => {
     textTime.innerHTML = getParseCurrentTime(video.currentTime) + '/' + getParseCurrentTime(video.duration);
-    let newWidth = (maxWidthBar * video.currentTime) / video.duration;
-    currentBar.style.width = `${newWidth}px`;
+    let percent = (video.currentTime / video.duration) * 100;
+    currentBar.style.width = `${percent}%`;
 }
 
 const getParseCurrentTime = (time) => {
