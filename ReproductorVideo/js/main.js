@@ -16,7 +16,8 @@ let muted = false;
 let lastVolume;
 let mouseDown = false;
 let first = false;
-let alreadyEvent = false;
+let mostrarAnuncio = true;
+
 
 // Seleccion de videos
 document.querySelectorAll('.video-recomendado').forEach(videoClick => {
@@ -25,6 +26,7 @@ document.querySelectorAll('.video-recomendado').forEach(videoClick => {
         video.src = videoClick.src;
         btnPlayPause.setAttribute('state', 'play');
 
+        mostrarAnuncio = true;
         playPause();
 
     })
@@ -101,12 +103,10 @@ async function esperarAnuncio() {
 
 async function playPause() {
     
-    if (!alreadyEvent) {
-        alreadyEvent = true;
+    if (mostrarAnuncio) {
         await esperarAnuncio();
-        alreadyEvent = false
+        mostrarAnuncio = false;
     }
-    else return;
 
     let child = btnPlayPause.firstElementChild;
 
@@ -125,7 +125,6 @@ async function playPause() {
     far.classList.add('animation');
     far.addEventListener('animationend', () => far.classList.remove('animation'));
 
-    alreadyEvent = false;
 }
 
 function forwardVideo() {
