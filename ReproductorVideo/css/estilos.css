@@ -113,3 +113,24 @@ video {
     align-items: center;
     color: white;
 }
+
+.anuncio {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: red;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+    transition-timing-function: ease;
+}
+
+.mensajeAnuncio {
+    color: white;
+    font-size: 20px;
+}

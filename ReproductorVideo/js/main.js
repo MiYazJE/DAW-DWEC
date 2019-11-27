@@ -15,6 +15,8 @@ let eventDisplayControls;
 let muted = false;
 let lastVolume;
 let mouseDown = false;
+let first = false;
+let alreadyEvent = false;
 
 // Seleccion de videos
 document.querySelectorAll('.video-recomendado').forEach(videoClick => {
@@ -22,8 +24,9 @@ document.querySelectorAll('.video-recomendado').forEach(videoClick => {
 
         video.src = videoClick.src;
         btnPlayPause.setAttribute('state', 'play');
-
+        
         playPause();
+
     })
 })
 
@@ -80,8 +83,31 @@ btnMute.addEventListener('click', muteVideo);
 btnVolumeUp.addEventListener('click', volumeUp);
 btnVolumeDown.addEventListener('click', volumeDown);
 
-function playPause() {
+async function esperarAnuncio() {
+
+    document.querySelector('.anuncio').style.opacity = 1;
+    let msg = ' segundos para reproducir el video.';
+    let mensajeAnuncio = document.querySelector('.mensajeAnuncio');
     
+    for (let i = 2; i >= 0; i--) {
+        mensajeAnuncio.innerHTML = i + msg;
+        await new Promise(resolve => {
+            setTimeout(resolve, 1000);
+        })
+    }
+
+    document.querySelector('.anuncio').style.opacity = 0;
+}
+
+async function playPause() {
+    
+    if (!alreadyEvent) {
+        alreadyEvent = true;
+        await esperarAnuncio();
+        alreadyEvent = false
+    }
+    else return;
+
     let child = btnPlayPause.firstElementChild;
 
     if (btnPlayPause.getAttribute('state') == 'play') {
@@ -98,6 +124,8 @@ function playPause() {
     let far = document.querySelector('.far'); 
     far.classList.add('animation');
     far.addEventListener('animationend', () => far.classList.remove('animation'));
+
+    alreadyEvent = false;
 }
 
 function forwardVideo() {
