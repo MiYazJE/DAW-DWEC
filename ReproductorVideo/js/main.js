@@ -24,7 +24,7 @@ document.querySelectorAll('.video-recomendado').forEach(videoClick => {
 
         video.src = videoClick.src;
         btnPlayPause.setAttribute('state', 'play');
-        
+
         playPause();
 
     })
@@ -89,7 +89,7 @@ async function esperarAnuncio() {
     let msg = ' segundos para reproducir el video.';
     let mensajeAnuncio = document.querySelector('.mensajeAnuncio');
     
-    for (let i = 2; i >= 0; i--) {
+    for (let i = 10; i >= 0; i--) {
         mensajeAnuncio.innerHTML = i + msg;
         await new Promise(resolve => {
             setTimeout(resolve, 1000);
