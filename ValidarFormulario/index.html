@@ -7,43 +7,47 @@
     <style>
         @import url('css/estilos.css');
     </style>
-    <script src="js/validarFormulario.js"></script>
+    <script defer src="js/main.js"></script>
 </head>
 
 <body>
 
-    <form action="#">
+    <div class="form">
         <h1>Validación del Formulario</h1>
-        <div>
+        <div class="estirar">
             <p>Nombre: </p>
-            <input onblur="validarNombre(this)" type="text" placeholder="Introduce tu nombre...">
+            <input class="nombre" type="text" placeholder="Introduce tu nombre...">
         </div>
-        <div>
+        <div class="estirar">
             <p>Apellidos: </p>
-            <input onblur="validarApellidos(this)" type="text" placeholder="Introduce tus apellidos...">
+            <input class="apellidos" type="text" placeholder="Introduce tus apellidos...">
         </div>
-        <div>
+        <div class="estirar">
+            <p>Telefono: </p>
+            <input class="telefono" type="text" placeholder="Introduce tu telefono...">
+        </div>
+        <div class="estirar">
             <p>e-mail: </p>
-            <input onblur="validarEmail(this)" type="text" placeholder="Introduce tu e-mail...">
+            <input class="mail" type="text" placeholder="Introduce tu e-mail...">
         </div>
-        <div>
+        <div class="estirar">
             <p>DNI: </p>
-            <input onblur="validarDni(this)" type="text" placeholder="Introduce tu dni..." maxlength="9">
+            <input class="dni" type="text" placeholder="Introduce tu dni..." maxlength="9">
         </div>
-        <div>
+        <div class="estirar">
             <p>Password: </p>
-            <input onblur="validarPassword(this)" type="password">
+            <input class="password" type="password">
         </div>
-        <div>
+        <div class="estirar">
             <p>Repetir password: </p>
-            <input onblur="validarPassword(this)" type="password">
+            <input class="passwordRepetida" type="password">
         </div>
-        <div>
-            <p>IP equipo: </p>
-            <input onblur="validarDireccionIp(this)" type="text" placeholder="Introduce tu direccion ip...">
-        </div>
-        <input onclick="notificarErrores()" type="submit">
-    </form>
+        <button class="submit">Enviar</button>
+    </div>
+
+    <div id="notificacionConsulta">
+
+    </div>
 
 </body>
 
