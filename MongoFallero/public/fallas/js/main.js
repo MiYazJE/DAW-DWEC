@@ -1,10 +1,21 @@
 
-const insertarFalla = (nombreFalla, srcFoto, anyoFundada) => {
+const creacionEventosTipoFalla = () => {
+
+    const radioFallaPrincipal = document.querySelector('.radioFallaPrincipal');
+    const radioFallaInfantil  = document.querySelector('.radioFallaInfantil');
+
+    radioFallaPrincipal.onchange = cargarFallas;
+    radioFallaInfantil.onchange  = cargarFallas;
+}
+
+const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista) => {
     contenedorFallas.innerHTML += `
         <div class="falla">
             <p class="nombreFalla">${nombreFalla}</p>
             <img class="fotoFalla" src="${srcFoto}" alt="Foto de la falla ${nombreFalla}">
+            <p>${artista}</p>
             <p>Año fundada: ${anyoFundada}</p>
+            <p>Falla ${tipoFalla}</p>
             <button class="btnUbicacion">Ubicación</button>
         </div>`;
 }
@@ -23,7 +34,7 @@ const getMinAndMaxYear = () => {
             maxYear = Math.max(year, maxYear);
         }
     });
-    
+
     return { minYear, maxYear };
 }
 
@@ -51,7 +62,7 @@ const insertarComboBoxFundacion = () => {
     inputHasta.placeholder = `Hasta ${years.maxYear}`;
 }
 
-const insertarComboBoxregiones = (regiones) => {
+const insertarComboBoxRegiones = (regiones) => {
     
     const comboRegiones = document.querySelector('.comboRegiones');
     let set = new Set();
@@ -69,13 +80,7 @@ const insertarComboBoxregiones = (regiones) => {
         }
     })
 
-    // Mostrar las fallas de la region seleccionada
     comboRegiones.onchange = cargarFallas;
-}
-
-const cargarInformacionInputs = (regiones) => {
-    insertarComboBoxregiones(regiones);
-    insertarComboBoxFundacion();
 }
 
 const cargarFallas = () => {
@@ -99,7 +104,28 @@ const cargarFallas = () => {
     // Limpiamos las anteriores busquedas
     contenedorFallas.innerHTML = '';
 
-    fallasFiltradas.map(falla => insertarFalla(falla.nombre, falla.boceto, falla.anyo_fundacion));
+    // Obtener que tipo de falla esta seleccionada
+    const radioFallaPrincipal = document.querySelector('.radioFallaPrincipal');
+    const radioFallaInfantil  = document.querySelector('.radioFallaInfantil');
+
+    fallasFiltradas.map(falla => {
+        if (radioFallaPrincipal.checked) {
+            let artista = (falla.artista.length != 0) ? `Artista: ${falla.artista}` : 'Artista desconocido';
+            insertarFalla(falla.nombre, falla.boceto, falla.anyo_fundacion, 'PRINCIPAL', artista);
+        }
+        if (radioFallaInfantil.checked) {
+            let artista = (falla.artista_i.length != 0) ? `Artista: ${falla.artista_i}` : 'Artista desconocido'; 
+            insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'IFANTIL', artista);
+        }
+    });
+}
+
+const cargarInformacionInputs = (regiones) => {
+
+    insertarComboBoxRegiones(regiones);
+    insertarComboBoxFundacion();
+    
+    creacionEventosTipoFalla();
 }
 
 const obtenerFallas = async () => {
