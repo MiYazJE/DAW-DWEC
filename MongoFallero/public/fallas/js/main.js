@@ -1,13 +1,15 @@
 
-const insertarFalla = (nombreFalla, srcFoto) => {
+const insertarFalla = (nombreFalla, srcFoto, anyoFundada) => {
     contenedorFallas.innerHTML += `
         <div class="falla">
             <p class="nombreFalla">${nombreFalla}</p>
             <img class="fotoFalla" src="${srcFoto}" alt="Foto de la falla ${nombreFalla}">
+            <p>Año fundada: ${anyoFundada}</p>
             <button class="btnUbicacion">Ubicación</button>
         </div>`;
 }
 
+// Obtener los años de la primera y la ultima falla creada
 const getMinAndMaxYear = () => {
 
     let minYear = 3000;
@@ -21,7 +23,7 @@ const getMinAndMaxYear = () => {
             maxYear = Math.max(year, maxYear);
         }
     });
-
+    
     return { minYear, maxYear };
 }
 
@@ -32,10 +34,20 @@ const insertarComboBoxFundacion = () => {
     const inputDesde = document.querySelector('.anyoDesde');
     const inputHasta = document.querySelector('.anyoHasta');
 
-    inputDesde.min = years.minYear;
-    inputHasta.max = years.maxYear;
+    inputDesde.min = inputDesde.value = years.minYear;
+    inputDesde.max = years.maxYear;
 
-    inputDesde.placeholder = `Dede ${years.minYear}`;
+    inputHasta.min = years.minYear;
+    inputHasta.max = inputHasta.value = years.maxYear;
+
+    inputDesde.onchange = () => {
+        inputHasta.min = inputHasta.value = inputDesde.value;
+        cargarFallas();
+    }
+
+    inputHasta.onchange = cargarFallas;
+
+    inputDesde.placeholder = `Desde ${years.minYear}`;
     inputHasta.placeholder = `Hasta ${years.maxYear}`;
 }
 
@@ -58,28 +70,36 @@ const insertarComboBoxregiones = (regiones) => {
     })
 
     // Mostrar las fallas de la region seleccionada
-    comboRegiones.onchange = () => {
-        cargarFallas(comboRegiones.options[comboRegiones.selectedIndex].value);
-    }
-
+    comboRegiones.onchange = cargarFallas;
 }
 
-const insertarOptions = (regiones) => {
+const cargarInformacionInputs = (regiones) => {
     insertarComboBoxregiones(regiones);
     insertarComboBoxFundacion();
 }
 
-const cargarFallas = (sector) => {
+const cargarFallas = () => {
 
-    let fallasFiltradas = fallas.filter(falla => falla.sector === sector);
+    const comboSector = document.querySelector('.comboRegiones');
+    let sector = comboSector.options[comboSector.selectedIndex].value;
 
-    // Ordenar por orden alfabeticamente las fallas
+    let anyoDesde = document.querySelector('.anyoDesde').value;
+    let anyoHasta = document.querySelector('.anyoHasta').value;
+
+    let fallasFiltradas = fallas.filter(falla =>  {
+        if (falla.anyo_fundacion && falla.sector) {
+            return (falla.sector === sector && falla.anyo_fundacion >= anyoDesde && falla.anyo_fundacion <= anyoHasta);
+        }
+        return false;
+    });
+
+    // Ordenar alfabeticamente las fallas
     fallasFiltradas.sort((falla1, falla2) => falla1.nombre.localeCompare(falla2.nombre));
 
     // Limpiamos las anteriores busquedas
     contenedorFallas.innerHTML = '';
 
-    fallasFiltradas.map(falla => insertarFalla(falla.nombre, falla.boceto));
+    fallasFiltradas.map(falla => insertarFalla(falla.nombre, falla.boceto, falla.anyo_fundacion));
 }
 
 const obtenerFallas = async () => {
@@ -92,13 +112,14 @@ const obtenerFallas = async () => {
     
     const regiones = fallas.map(element => element.sector);
 
-    insertarOptions(regiones);
+    cargarInformacionInputs(regiones);
 }
 
 const init = async () => { await obtenerFallas(); console.log(fallas)}
 
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;
+let minYearFundacion, maxYearFundacion;
 const contenedorFallas = document.querySelector('#contenedorFallas');
 
 window.onload = init;

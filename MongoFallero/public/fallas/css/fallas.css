@@ -21,7 +21,7 @@
   .btnMostrarFallas:hover, main #contenedorFallas .falla .btnUbicacion:hover {
     background-color: lightsalmon; }
 
-main, main #contenedorFallas, main #contenedorFallas .falla, #form {
+main, main #form, main #contenedorFallas, main #contenedorFallas .falla {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,6 +34,14 @@ main {
   flex-direction: column;
   margin-top: 50px;
   width: 100%; }
+  main #form {
+    flex-direction: column;
+    width: 50%; }
+    main #form * {
+      margin: 10px; }
+    main #form .inputsForm {
+      width: 100%;
+      text-align: center; }
   main #contenedorFallas {
     margin-top: 50px;
     width: 100%; }
@@ -48,8 +56,3 @@ main {
         height: 300px; }
       main #contenedorFallas .falla * {
         margin: 5px; }
-
-#form {
-  flex-direction: column; }
-  #form * {
-    margin: 10px; }

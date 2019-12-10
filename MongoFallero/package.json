@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scss": "node-sass --watch scss -o \"public\/fallas\/css\/\""
+    "scss": "node-sass --watch scss -o \"public/fallas/css/\""
   },
   "repository": {
     "type": "git",

@@ -61,6 +61,23 @@ main {
     margin-top: 50px;
     width: 100%;
 
+    #form {
+
+        @extend %display-flex-center;
+        flex-direction: column;
+        width: 50%;
+        
+        * {
+            margin: 10px;
+        }
+    
+        .inputsForm {
+            width: 100%;
+            text-align: center;
+        }
+    
+    }
+
     #contenedorFallas {
 
         @extend %display-flex-center;
@@ -95,14 +112,5 @@ main {
 
 }
 
-#form {
 
-    @extend %display-flex-center;
-    flex-direction: column;
-    
-    * {
-        margin: 10px;
-    }
-
-}
 
