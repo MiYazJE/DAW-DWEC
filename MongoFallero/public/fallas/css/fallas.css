@@ -51,3 +51,5 @@ main {
 
 #form {
   flex-direction: column; }
+  #form * {
+    margin: 10px; }

@@ -96,7 +96,13 @@ main {
 }
 
 #form {
+
     @extend %display-flex-center;
     flex-direction: column;
+    
+    * {
+        margin: 10px;
+    }
+
 }
 

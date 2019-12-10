@@ -8,6 +8,37 @@ const insertarFalla = (nombreFalla, srcFoto) => {
         </div>`;
 }
 
+const getMinAndMaxYear = () => {
+
+    let minYear = 3000;
+    let maxYear = -1;
+    let year;
+
+    fallas.map(falla => {
+        year = parseInt(falla.anyo_fundacion);
+        if (year) {
+            minYear = Math.min(year, minYear);
+            maxYear = Math.max(year, maxYear);
+        }
+    });
+
+    return { minYear, maxYear };
+}
+
+const insertarComboBoxFundacion = () => {
+
+    let years = getMinAndMaxYear();
+
+    const inputDesde = document.querySelector('.anyoDesde');
+    const inputHasta = document.querySelector('.anyoHasta');
+
+    inputDesde.min = years.minYear;
+    inputHasta.max = years.maxYear;
+
+    inputDesde.placeholder = `Dede ${years.minYear}`;
+    inputHasta.placeholder = `Hasta ${years.maxYear}`;
+}
+
 const insertarComboBoxregiones = (regiones) => {
     
     const comboRegiones = document.querySelector('.comboRegiones');
@@ -35,6 +66,7 @@ const insertarComboBoxregiones = (regiones) => {
 
 const insertarOptions = (regiones) => {
     insertarComboBoxregiones(regiones);
+    insertarComboBoxFundacion();
 }
 
 const cargarFallas = (sector) => {
