@@ -9,11 +9,9 @@ export default class Mapa {
 
         this.map = L.map(this.idMapa);
 
-        let tilerMapUrl = 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=FeZF25xvZUuP463NS59g';
+        let tilerMapUrl = 'https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}.png?key=FeZF25xvZUuP463NS59g';
         L.tileLayer(tilerMapUrl, {
             attribution: 'Map data © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, Imagery © <a href="http://www.kartena.se/">Kartena</a>',
-            minZoom: 0,
-            maxZoom: 20
         }).addTo(this.map);
 
     }
