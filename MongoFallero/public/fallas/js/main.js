@@ -14,23 +14,31 @@ const abrirUbicacion = (btn) => {
 
     let contenedorMapa = document.querySelector('#contenedorMapa');
 
-    contenedorMapa.style.display = 'block';
+    // Mostrar el mapa
+    contenedorMapa.style.zIndex = 20;
     contenedorMapa.style.opacity = 1;
 
     // Eliminar scroll
     document.documentElement.style.overflow = 'hidden';
     document.body.scroll = 'no';
 
+    // Eliminar la propagacion de eventos desde el mapa
     document.querySelector('#myMap').onclick = (e) => {
         e.stopPropagation();
     };
 
+    // Mostrar el contenedor cuando se haga click sobre el btn Ubicacion
     contenedorMapa.onclick = () => {
+        contenedorMapa.style.opacity = 0;
         document.documentElement.style.overflow = 'auto';
         document.body.scroll = 'yes';
-        contenedorMapa.style.opacity = 0;
-        contenedorMapa.style.display = 'none';
-    };
+    }
+
+    // Esconder el contenedor del mapa
+    contenedorMapa.addEventListener('transitionend', () => {
+        if (contenedorMapa.style.opacity === '0') 
+            contenedorMapa.style.zIndex = -1;
+    });
 
 }
 

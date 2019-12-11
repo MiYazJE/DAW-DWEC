@@ -33,7 +33,9 @@ main, main #form, main #contenedorFallas, main #contenedorFallas .falla {
 main {
   flex-direction: column;
   margin-top: 50px;
-  width: 100%; }
+  width: 100%;
+  position: absolute;
+  z-index: 10; }
   main #form {
     flex-direction: column;
     width: 50%; }
@@ -66,8 +68,8 @@ main {
   background-color: rgba(0, 0, 0, 0.75);
   transition-property: opacity;
   transition-duration: 1s;
-  display: none;
-  opacity: 0; }
+  opacity: 0;
+  z-index: -1; }
   #contenedorMapa #myMap {
     position: absolute;
     width: 50%;
