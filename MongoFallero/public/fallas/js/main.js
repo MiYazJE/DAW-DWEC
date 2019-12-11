@@ -44,7 +44,7 @@ const creacionEventosTipoFalla = () => {
 }
 
 const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista) => {
-    contenedorFallas.innerHTML += `
+    return `
         <div class="falla">
             <p class="nombreFalla">${nombreFalla}</p>
             <img class="fotoFalla" src="${srcFoto}" alt="Foto de la falla ${nombreFalla}">
@@ -71,6 +71,24 @@ const getMinAndMaxYear = () => {
     });
 
     return { minYear, maxYear };
+}
+
+const generarHtmlFallas = (fallasFiltradas, radioFallaPrincipal, radioFallaInfantil) => {
+
+    let contenedor = '';
+    
+    fallasFiltradas.map(falla => {
+        if (radioFallaPrincipal.checked) {
+            let artista = (falla.artista.length != 0) ? `Artista: ${falla.artista}` : 'Artista desconocido';
+            contenedor += insertarFalla(falla.nombre, falla.boceto, falla.anyo_fundacion, 'PRINCIPAL', artista);
+        }
+        if (radioFallaInfantil.checked) {
+            let artista = (falla.artista_i.length != 0) ? `Artista: ${falla.artista_i}` : 'Artista desconocido'; 
+            contenedor += insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'IFANTIL', artista);
+        }
+    });
+
+    return contenedor;
 }
 
 const insertarComboBoxFundacion = () => {
@@ -121,13 +139,13 @@ const insertarComboBoxRegiones = (regiones) => {
 const cargarFallas = () => {
 
     const comboSector = document.querySelector('.comboRegiones');
-    let sector = comboSector.options[comboSector.selectedIndex].value;
+    let sector        = comboSector.options[comboSector.selectedIndex].value;
 
     let anyoDesde = document.querySelector('.anyoDesde').value;
     let anyoHasta = document.querySelector('.anyoHasta').value;
 
     let fallaBuscada = document.querySelector('.buscadorFalla').value;
-    fallaBuscada = fallaBuscada.toLowerCase();
+    fallaBuscada     = fallaBuscada.toLowerCase();
 
     let fallasFiltradas = fallas.filter(falla =>  {
         if (falla.anyo_fundacion && falla.sector) {
@@ -142,23 +160,15 @@ const cargarFallas = () => {
     // Ordenar alfabeticamente las fallas
     fallasFiltradas.sort((falla1, falla2) => falla1.nombre.localeCompare(falla2.nombre));
 
-    // Limpiamos las anteriores busquedas
-    contenedorFallas.innerHTML = '';
-
     // Obtener que tipo de falla esta seleccionada
     const radioFallaPrincipal = document.querySelector('.radioFallaPrincipal');
     const radioFallaInfantil  = document.querySelector('.radioFallaInfantil');
 
-    fallasFiltradas.map(falla => {
-        if (radioFallaPrincipal.checked) {
-            let artista = (falla.artista.length != 0) ? `Artista: ${falla.artista}` : 'Artista desconocido';
-            insertarFalla(falla.nombre, falla.boceto, falla.anyo_fundacion, 'PRINCIPAL', artista);
-        }
-        if (radioFallaInfantil.checked) {
-            let artista = (falla.artista_i.length != 0) ? `Artista: ${falla.artista_i}` : 'Artista desconocido'; 
-            insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'IFANTIL', artista);
-        }
-    });
+    // Obtener el html generado con toda la info de las fallas
+    let htmlFallas = generarHtmlFallas(fallasFiltradas, radioFallaPrincipal, radioFallaInfantil);
+
+    // Insertar todo el html generado
+    contenedorFallas.innerHTML = htmlFallas;
 
     // Aplicar eventos al boton de abrir ubicación
     document.querySelectorAll('.btnUbicacion').forEach(btn => btn.onclick = () => abrirUbicacion(btn));
