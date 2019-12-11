@@ -1,12 +1,36 @@
 
 import Mapa from './mapa.js';
 
+const creacionEventoBusqueda = () => {
+    document.querySelector('.buscadorFalla').onchange = cargarFallas;
+}
+
 const abrirUbicacion = (btn) => {
     
     let nombreFalla = btn.getAttribute('nombreFalla');
     let coordenadas = mapFallas.get(nombreFalla);
 
     mapa.modificarCoordenadas(coordenadas);
+
+    let contenedorMapa = document.querySelector('#contenedorMapa');
+
+    contenedorMapa.style.display = 'block';
+    contenedorMapa.style.opacity = 1;
+
+    // Eliminar scroll
+    document.documentElement.style.overflow = 'hidden';
+    document.body.scroll = 'no';
+
+    document.querySelector('#myMap').onclick = (e) => {
+        e.stopPropagation();
+    };
+
+    contenedorMapa.onclick = () => {
+        document.documentElement.style.overflow = 'auto';
+        document.body.scroll = 'yes';
+        contenedorMapa.style.opacity = 0;
+        contenedorMapa.style.display = 'none';
+    };
 
 }
 
@@ -102,9 +126,15 @@ const cargarFallas = () => {
     let anyoDesde = document.querySelector('.anyoDesde').value;
     let anyoHasta = document.querySelector('.anyoHasta').value;
 
+    let fallaBuscada = document.querySelector('.buscadorFalla').value;
+    fallaBuscada = fallaBuscada.toLowerCase();
+
     let fallasFiltradas = fallas.filter(falla =>  {
         if (falla.anyo_fundacion && falla.sector) {
-            return (falla.sector === sector && falla.anyo_fundacion >= anyoDesde && falla.anyo_fundacion <= anyoHasta);
+            return ((sector === 'all' || falla.sector === sector) && 
+                    falla.anyo_fundacion >= anyoDesde && 
+                    falla.anyo_fundacion <= anyoHasta &&
+                    falla.nombre.toLowerCase().includes(fallaBuscada));
         }
         return false;
     });
@@ -139,7 +169,7 @@ const cargarInformacionInputs = (regiones) => {
     insertarComboBoxRegiones(regiones);
     insertarComboBoxFundacion();
     creacionEventosTipoFalla();
-
+    creacionEventoBusqueda();
 }
 
 const obtenerFallas = async () => {
@@ -153,14 +183,12 @@ const obtenerFallas = async () => {
         return element.properties;
     });
     
-    console.log(mapFallas)
-
     const regiones = fallas.map(element => element.sector);
 
     cargarInformacionInputs(regiones);
 }
 
-const init = async () => await obtenerFallas();
+const init = async () => {await obtenerFallas(); console.log(fallas)};
 
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;

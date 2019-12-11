@@ -57,5 +57,20 @@ main {
       main #contenedorFallas .falla * {
         margin: 5px; }
 
-#myMap {
-  height: 500px; }
+#contenedorMapa {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  transition-property: opacity;
+  transition-duration: 1s;
+  display: none;
+  opacity: 0; }
+  #contenedorMapa #myMap {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%; }

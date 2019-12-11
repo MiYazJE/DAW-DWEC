@@ -5,10 +5,9 @@ export default class Mapa {
         this.idMapa = idMapa;
     }
 
-
     crearMapa() {
 
-        this.map = L.map(this.idMapa);
+        this.map = L.map(this.idMapa).setView([0, 0], 1);
 
         let tilerMapUrl = 'https://api.maptiler.com/maps/topo/256/{z}/{x}/{y}.png?key=FeZF25xvZUuP463NS59g';
         L.tileLayer(tilerMapUrl, {

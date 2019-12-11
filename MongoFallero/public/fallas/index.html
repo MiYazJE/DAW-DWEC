@@ -27,20 +27,25 @@
 
     <main>
         <div id="form">
-            <select class="comboRegiones inputsForm"></select>
+            <select class="comboRegiones inputsForm">
+                <option value="all">Todas</option>
+            </select>
             <input class="anyoDesde inputsForm" type="number">
             <input class="anyoHasta inputsForm" type="number">
             <div>
                 Principal <input class="radioFallaPrincipal" type="checkbox"> <br />
                 Infantil <input class="radioFallaInfantil" type="checkbox">
             </div>
+            <input class="buscadorFalla inputsForm" type="text" placeholder="Busca por nombre...">
         </div>
         <div id="contenedorFallas">
 
         </div>
     </main>
 
-    <div id="myMap"></div>
+    <div id="contenedorMapa">
+        <div id="myMap"></div>
+    </div>
 
 </body>
 
