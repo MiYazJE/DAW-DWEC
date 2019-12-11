@@ -16,22 +16,42 @@ export default class Mapa {
 
     }
 
-    modificarCoordenadas(coordenadas) {
+    modificarCoordenadas(coordenadas, falla) {
 
-        // Cambiar la proyeccion de la referencia espacial 25830 a 4326
-        let firstProjection  = '+proj=utm +zone=30 +ellps=GRS80 +units=m +no_defs';
-        let secondProjection = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
-        coordenadas = proj4(firstProjection, secondProjection, coordenadas);
+        coordenadas = this.getWGSCoordinates(coordenadas);
 
-        coordenadas = [coordenadas[1], coordenadas[0]];
-
-        this.map.setView(coordenadas, 15);
+        this.map.setView(coordenadas, 16);
 
         // Eliminar el marcador de la busqueda anterior
         if (this.marker) 
             this.map.removeLayer(this.marker);
         
         this.marker = L.marker(coordenadas).addTo(this.map);
+
+        this.setPopup(coordenadas, falla);
+    }
+
+    getWGSCoordinates(coordenadas) {
+        
+        // Cambiar la proyeccion de la referencia espacial 25830 a 4326
+        let firstProjection  = '+proj=utm +zone=30 +ellps=GRS80 +units=m +no_defs';
+        let secondProjection = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
+        coordenadas = proj4(firstProjection, secondProjection, coordenadas);
+
+        return [coordenadas[1], coordenadas[0]];
+    }
+
+    setPopup(coordenadas, falla) {  
+        
+        let infoFalla = `
+            <div class="infoFalla">
+                <h3>${falla.nombre}</h3>
+                <img src="${falla.boceto}">
+            </div>
+        `;
+
+        L.marker(coordenadas).addTo(this.map)
+        .bindPopup(infoFalla).openPopup();
     }
 
 }

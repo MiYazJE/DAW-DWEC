@@ -7,10 +7,10 @@ const creacionEventoBusqueda = () => {
 
 const abrirUbicacion = (btn) => {
     
-    let nombreFalla = btn.getAttribute('nombreFalla');
-    let coordenadas = mapFallas.get(nombreFalla);
+    let idFalla = btn.getAttribute('idFalla');
+    let falla = mapFallas.get(idFalla);
 
-    mapa.modificarCoordenadas(coordenadas);
+    mapa.modificarCoordenadas(falla.geometry.coordinates, falla.properties);
 
     let contenedorMapa = document.querySelector('#contenedorMapa');
 
@@ -51,7 +51,7 @@ const creacionEventosTipoFalla = () => {
     radioFallaInfantil.onchange  = cargarFallas;
 }
 
-const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista) => {
+const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista, id) => {
     return `
         <div class="falla">
             <p class="nombreFalla">${nombreFalla}</p>
@@ -59,7 +59,7 @@ const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista) =>
             <p>${artista}</p>
             <p>Año fundada: ${anyoFundada}</p>
             <p>Falla ${tipoFalla}</p>
-            <button nombreFalla="${nombreFalla}" class="btnUbicacion">Ubicación</button>
+            <button idfalla="${id}" class="btnUbicacion">Ubicación</button>
         </div>`;
 }
 
@@ -88,11 +88,11 @@ const generarHtmlFallas = (fallasFiltradas, radioFallaPrincipal, radioFallaInfan
     fallasFiltradas.map(falla => {
         if (radioFallaPrincipal.checked) {
             let artista = (falla.artista.length != 0) ? `Artista: ${falla.artista}` : 'Artista desconocido';
-            contenedor += insertarFalla(falla.nombre, falla.boceto, falla.anyo_fundacion, 'PRINCIPAL', artista);
+            contenedor += insertarFalla(falla.nombre, falla.boceto, falla.anyo_fundacion, 'PRINCIPAL', artista, falla.id);
         }
         if (radioFallaInfantil.checked) {
             let artista = (falla.artista_i.length != 0) ? `Artista: ${falla.artista_i}` : 'Artista desconocido'; 
-            contenedor += insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'IFANTIL', artista);
+            contenedor += insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'IFANTIL', artista, falla.id);
         }
     });
 
@@ -196,9 +196,9 @@ const obtenerFallas = async () => {
     const json     = await response.json();
     
     // Obtener todas las propiedades del objeto
-    fallas = json.features.map(element => {
-        mapFallas.set(element.properties.nombre, element.geometry.coordinates);
-        return element.properties;
+    fallas = json.features.map(falla => {
+        mapFallas.set(falla.properties.id, falla);
+        return falla.properties;
     });
     
     const regiones = fallas.map(element => element.sector);
@@ -210,7 +210,7 @@ const init = async () => {await obtenerFallas(); console.log(fallas)};
 
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;
-// Almacena => clave: nombreFalla, valor: coordenadas
+// Almacena => clave: idFalla, valor: ObjetoFalla
 const mapFallas = new Map();
 const contenedorFallas = document.querySelector('#contenedorFallas');
 
