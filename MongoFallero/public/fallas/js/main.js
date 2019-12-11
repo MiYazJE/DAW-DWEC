@@ -1,4 +1,15 @@
 
+import Mapa from './mapa.js';
+
+const abrirUbicacion = (btn) => {
+    
+    let nombreFalla = btn.getAttribute('nombreFalla');
+    let coordenadas = mapFallas.get(nombreFalla);
+
+    mapa.modificarCoordenadas(coordenadas);
+
+}
+
 const creacionEventosTipoFalla = () => {
 
     const radioFallaPrincipal = document.querySelector('.radioFallaPrincipal');
@@ -16,7 +27,7 @@ const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista) =>
             <p>${artista}</p>
             <p>Año fundada: ${anyoFundada}</p>
             <p>Falla ${tipoFalla}</p>
-            <button class="btnUbicacion">Ubicación</button>
+            <button nombreFalla="${nombreFalla}" class="btnUbicacion">Ubicación</button>
         </div>`;
 }
 
@@ -118,14 +129,17 @@ const cargarFallas = () => {
             insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'IFANTIL', artista);
         }
     });
+
+    // Aplicar eventos al boton de abrir ubicación
+    document.querySelectorAll('.btnUbicacion').forEach(btn => btn.onclick = () => abrirUbicacion(btn));
 }
 
 const cargarInformacionInputs = (regiones) => {
 
     insertarComboBoxRegiones(regiones);
     insertarComboBoxFundacion();
-    
     creacionEventosTipoFalla();
+
 }
 
 const obtenerFallas = async () => {
@@ -134,18 +148,27 @@ const obtenerFallas = async () => {
     const json     = await response.json();
     
     // Obtener todas las propiedades del objeto
-    fallas = json.features.map(element => element.properties);
+    fallas = json.features.map(element => {
+        mapFallas.set(element.properties.nombre, element.geometry.coordinates);
+        return element.properties;
+    });
     
+    console.log(mapFallas)
+
     const regiones = fallas.map(element => element.sector);
 
     cargarInformacionInputs(regiones);
 }
 
-const init = async () => { await obtenerFallas(); console.log(fallas)}
+const init = async () => await obtenerFallas();
 
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;
-let minYearFundacion, maxYearFundacion;
+// Almacena => clave: nombreFalla, valor: coordenadas
+const mapFallas = new Map();
 const contenedorFallas = document.querySelector('#contenedorFallas');
+
+let mapa = new Mapa('myMap');
+mapa.crearMapa();
 
 window.onload = init;

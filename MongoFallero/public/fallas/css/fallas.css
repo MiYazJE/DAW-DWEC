@@ -56,3 +56,6 @@ main {
         height: 300px; }
       main #contenedorFallas .falla * {
         margin: 5px; }
+
+#myMap {
+  height: 500px; }
