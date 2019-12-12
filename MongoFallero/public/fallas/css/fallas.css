@@ -72,10 +72,10 @@ main {
   z-index: -1; }
   #contenedorMapa #myMap {
     position: absolute;
-    width: 50%;
-    height: 50%;
-    top: 25%;
-    left: 25%; }
+    width: 70%;
+    height: 70%;
+    top: 15%;
+    left: 15%; }
 
 .infoFalla {
   text-align: center; }

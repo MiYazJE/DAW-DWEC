@@ -92,7 +92,7 @@ const generarHtmlFallas = (fallasFiltradas, radioFallaPrincipal, radioFallaInfan
         }
         if (radioFallaInfantil.checked) {
             let artista = (falla.artista_i.length != 0) ? `Artista: ${falla.artista_i}` : 'Artista desconocido'; 
-            contenedor += insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'IFANTIL', artista, falla.id);
+            contenedor += insertarFalla(falla.nombre, falla.boceto_i, falla.anyo_fundacion_i, 'INFANTIL', artista, falla.id);
         }
     });
 
@@ -165,7 +165,7 @@ const cargarFallas = () => {
         return false;
     });
 
-    // Ordenar alfabeticamente las fallas
+    // Ordenar alfabeticamente por nombre de falla
     fallasFiltradas.sort((falla1, falla2) => falla1.nombre.localeCompare(falla2.nombre));
 
     // Obtener que tipo de falla esta seleccionada
@@ -206,15 +206,13 @@ const obtenerFallas = async () => {
     cargarInformacionInputs(regiones);
 }
 
-const init = async () => {await obtenerFallas(); console.log(fallas)};
-
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;
 // Almacena => clave: idFalla, valor: ObjetoFalla
 const mapFallas = new Map();
 const contenedorFallas = document.querySelector('#contenedorFallas');
 
-let mapa = new Mapa('myMap');
-mapa.crearMapa();
+// Muestra la ubicación en un mapa por geolocalización
+const mapa = new Mapa('myMap');
 
-window.onload = init;
+window.onload = obtenerFallas;

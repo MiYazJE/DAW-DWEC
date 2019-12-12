@@ -3,6 +3,7 @@ export default class Mapa {
 
     constructor(idMapa) {
         this.idMapa = idMapa;
+        this.crearMapa();
     }
 
     crearMapa() {
@@ -26,9 +27,7 @@ export default class Mapa {
         if (this.marker) 
             this.map.removeLayer(this.marker);
         
-        this.marker = L.marker(coordenadas).addTo(this.map);
-
-        this.setPopup(coordenadas, falla);
+        this.marker = this.setPopup(coordenadas, falla);
     }
 
     getWGSCoordinates(coordenadas) {
@@ -50,7 +49,7 @@ export default class Mapa {
             </div>
         `;
 
-        L.marker(coordenadas).addTo(this.map)
+        return L.marker(coordenadas).addTo(this.map)
         .bindPopup(infoFalla).openPopup();
     }
 
