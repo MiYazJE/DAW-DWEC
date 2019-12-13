@@ -1,4 +1,4 @@
-const mongoose= require('mongoose');
+const mongoose = require('mongoose');
 
 // Object puntuacion model
 const PuntuacionSchema = mongoose.Schema({
@@ -9,4 +9,4 @@ const PuntuacionSchema = mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Puntuacion',PuntuacionSchema);
+module.exports = mongoose.model('Puntuacion', PuntuacionSchema);

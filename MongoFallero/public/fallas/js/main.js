@@ -1,5 +1,21 @@
 
 import Mapa from './mapa.js';
+import HTTPMethods from './httpMethods.js';
+
+const creacionEventoVotacion = async (btn) => {
+
+    let id = btn.getAttribute('idFalla');
+
+    // create puntuacion
+    let puntuacion = {
+        idFalla: id,
+        ip: '172.58.41.1',
+        puntuacion: 3
+    }
+
+    console.log(await httpMethods.sendPuntuacion(puntuacion))
+
+}
 
 const creacionEventoBusqueda = () => {
     document.querySelector('.buscadorFalla').onchange = cargarFallas;
@@ -60,6 +76,7 @@ const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista, id
             <p>Año fundada: ${anyoFundada}</p>
             <p>Falla ${tipoFalla}</p>
             <button idfalla="${id}" class="btnUbicacion">Ubicación</button>
+            <button idFalla="${id}" class="btnVotar">Votar</button>
         </div>`;
 }
 
@@ -180,9 +197,12 @@ const cargarFallas = () => {
 
     // Aplicar eventos al boton de abrir ubicación
     document.querySelectorAll('.btnUbicacion').forEach(btn => btn.onclick = () => abrirUbicacion(btn));
+
+    // Aplicar evento al puntuar una falla
+    document.querySelectorAll('.btnVotar').forEach(btn => btn.onclick = () => creacionEventoVotacion(btn));
 }
 
-const cargarInformacionInputs = (regiones) => {
+const initApplication = (regiones) => {
 
     insertarComboBoxRegiones(regiones);
     insertarComboBoxFundacion();
@@ -203,16 +223,24 @@ const obtenerFallas = async () => {
     
     const regiones = fallas.map(element => element.sector);
 
-    cargarInformacionInputs(regiones);
+    initApplication(regiones);
 }
 
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;
 // Almacena => clave: idFalla, valor: ObjetoFalla
 const mapFallas = new Map();
+
+const httpMethods = new HTTPMethods(); 
+console.log(getAlldata())
+
 const contenedorFallas = document.querySelector('#contenedorFallas');
 
 // Muestra la ubicación en un mapa por geolocalización
 const mapa = new Mapa('myMap');
 
 window.onload = obtenerFallas;
+
+async function getAlldata() {
+    return await httpMethods.getAllPuntuaciones();
+}

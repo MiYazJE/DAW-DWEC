@@ -1,30 +1,33 @@
 const Puntuacion = require('../models/puntuacion.model.js');
 
 // Get all data of puntuaciones
-exports.findAll = (req,res) => {
+exports.findAll = (req, res) => {
 
     Puntuacion.find()
-    .then(puntuaciones => {
-        res.send(puntuaciones);
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message || " Algo fue mal mientras los capturabamos a todos"
+        .then(puntuaciones => res.status(200).send(puntuaciones))
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Problems produced..."
+            });
         });
-    });
 
 };
 
-
 // create and save
-exports.create = (req,res) => {
+exports.create = (req, res) => {
 
     // validate puntuacion
-    if (!req.body){
+    if (!req.body) {
         console.log(req.body);
         return res.status(400).send({
            message: "puntuacion Vacia..." 
         });
+    }
+
+    if (!req.body.idFalla || !req.body.puntuacion || !req.body.ip) {
+        return res.send({
+            message: 'bad parameters'
+        })
     }
 
     // Create the object
@@ -41,5 +44,5 @@ exports.create = (req,res) => {
             res.status(500).send({
                 message: err.message || "Something was wrong creating puntuacion"
             });
-    });
+        })
 };

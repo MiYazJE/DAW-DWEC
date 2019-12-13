@@ -12,9 +12,7 @@ mongoose.Promise = global.Promise;
 // Parse jsons
 app.use(bodyParser.urlencoded({
     extended: true
-}))
-
-//Parsearemos los jsones
+}));
 app.use(bodyParser.json());
 
 // Test mongodb database

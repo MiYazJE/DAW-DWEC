@@ -3,22 +3,21 @@
   margin: 0;
   padding: 0; }
 
-.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion, input[name="inputFalla"] {
+.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion, .btnVotar, input[name="inputFalla"] {
   border-radius: 5px;
   outline: 0;
   border: 1px solid black;
   padding: 5px 20px 5px 20px;
   text-align: center; }
 
-.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion {
+.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion, .btnVotar {
   cursor: pointer;
-  margin-left: 20px;
   background-color: lightcoral;
   transition-property: background-color;
   transition-duration: 1s; }
-  .btnMostrarFallas:active, main #contenedorFallas .falla .btnUbicacion:active {
+  .btnMostrarFallas:active, main #contenedorFallas .falla .btnUbicacion:active, .btnVotar:active {
     transform: translateY(2px); }
-  .btnMostrarFallas:hover, main #contenedorFallas .falla .btnUbicacion:hover {
+  .btnMostrarFallas:hover, main #contenedorFallas .falla .btnUbicacion:hover, .btnVotar:hover {
     background-color: lightsalmon; }
 
 main, main #form, main #contenedorFallas, main #contenedorFallas .falla, .infoFalla {
@@ -72,10 +71,10 @@ main {
   z-index: -1; }
   #contenedorMapa #myMap {
     position: absolute;
-    width: 70%;
-    height: 70%;
-    top: 15%;
-    left: 15%; }
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%; }
 
 .infoFalla {
   text-align: center; }
