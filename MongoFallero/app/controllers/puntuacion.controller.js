@@ -13,6 +13,19 @@ exports.findAll = (req, res) => {
 
 };
 
+// Get all puntuations from a ip
+exports.findSome = (req, res) => {
+
+    Puntuacion.find(req.params)
+        .then(puntuaciones => res.status(200).send(puntuaciones))
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Problems produced..."
+            })
+        })
+    
+}
+
 // create and save
 exports.create = (req, res) => {
 

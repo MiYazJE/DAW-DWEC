@@ -5,8 +5,11 @@ module.exports = (app) => {
     // Create puntuaciones 
     app.post('/puntuaciones', puntuaciones.create)
 
-    // Retrieve all puntuaciones
-    app.get('/puntuaciones', puntuaciones.findAll)
+    // Retrieve all puntuations 
+    app.get('/puntuaciones/', puntuaciones.findAll)
+
+    // Retrieve all puntuations with ip 
+    app.get('/puntuaciones/:ip', puntuaciones.findSome)
 
     // Retrieve a single puntuaciones with puntuacionId
     //app.get('/puntuaciones/:puntuacionId', puntuaciones.findOne);
