@@ -2,7 +2,7 @@
 export default class HTTPMethods {
 
     constructor() {
-        this.url = 'http://localhost:3030/puntuaciones'
+        this.url = 'http://localhost:3030/puntuaciones/'
     }
     
     async sendPuntuacion(puntuacion) {
@@ -15,14 +15,14 @@ export default class HTTPMethods {
 
         this.request = new Request(this.url, this.init)
 
-        return fetch(this.request) 
-            .then(res => res.json())
-            .catch(err => err)
+        let data = await fetch(this.request) 
+        let json = await data.json()
+        return json;
     }
 
     async getAllPuntuaciones() {
         let data = await fetch(this.url)
-        let json = await data.json();
+        let json = await data.json()
         return json;
     }
 

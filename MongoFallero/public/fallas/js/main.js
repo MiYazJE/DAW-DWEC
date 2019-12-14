@@ -1,20 +1,10 @@
 
 import Mapa from './mapa.js';
 import HTTPMethods from './httpMethods.js';
+import StarRating from './starRating.js';
 
-const creacionEventoVotacion = async (btn) => {
-
-    let id = btn.getAttribute('idFalla');
-
-    // create puntuacion
-    let puntuacion = {
-        idFalla: id,
-        ip: '172.58.41.1',
-        puntuacion: 3
-    }
-
-    console.log(await httpMethods.sendPuntuacion(puntuacion))
-
+const getAlldata = async () =>  {
+    console.log(await new HTTPMethods().getAllPuntuaciones())
 }
 
 const creacionEventoBusqueda = () => {
@@ -76,7 +66,7 @@ const insertarFalla = (nombreFalla, srcFoto, anyoFundada, tipoFalla, artista, id
             <p>Año fundada: ${anyoFundada}</p>
             <p>Falla ${tipoFalla}</p>
             <button idfalla="${id}" class="btnUbicacion">Ubicación</button>
-            <button idFalla="${id}" class="btnVotar">Votar</button>
+            ${new StarRating().getHTML(id)}
         </div>`;
 }
 
@@ -200,6 +190,9 @@ const cargarFallas = () => {
 
     // Aplicar evento al puntuar una falla
     document.querySelectorAll('.btnVotar').forEach(btn => btn.onclick = () => creacionEventoVotacion(btn));
+
+    // Aplicar eventos a las estrellas, votaciones
+    new StarRating().applyEvents();
 }
 
 const initApplication = (regiones) => {
@@ -228,11 +221,9 @@ const obtenerFallas = async () => {
 
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;
+
 // Almacena => clave: idFalla, valor: ObjetoFalla
 const mapFallas = new Map();
-
-const httpMethods = new HTTPMethods(); 
-console.log(getAlldata())
 
 const contenedorFallas = document.querySelector('#contenedorFallas');
 
@@ -240,7 +231,3 @@ const contenedorFallas = document.querySelector('#contenedorFallas');
 const mapa = new Mapa('myMap');
 
 window.onload = obtenerFallas;
-
-async function getAlldata() {
-    return await httpMethods.getAllPuntuaciones();
-}

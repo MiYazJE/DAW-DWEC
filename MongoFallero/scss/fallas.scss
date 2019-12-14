@@ -148,6 +148,35 @@ main {
 
 }
 
-.btnVotar {
-    @extend %estilosBotones;
+.star-rating {
+
+    $selected: #F39C12;
+    $size: 25px;
+    $normal: #95A5A6;
+    
+    display: inline-block;
+    
+    span {
+    
+        float: right;
+        width: $size;
+        height: $size;
+        line-height: $size;
+        font-size: $size;
+        color: $normal;
+        text-decoration: none;
+        text-align: center;
+        transition: color .3s;
+        cursor: pointer;
+      
+        &:hover {
+
+            color: $selected;           
+            
+            & ~ span {
+                color: $selected;
+            }
+        }
+    }
+  
 }

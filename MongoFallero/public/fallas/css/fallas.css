@@ -3,21 +3,21 @@
   margin: 0;
   padding: 0; }
 
-.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion, .btnVotar, input[name="inputFalla"] {
+.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion, input[name="inputFalla"] {
   border-radius: 5px;
   outline: 0;
   border: 1px solid black;
   padding: 5px 20px 5px 20px;
   text-align: center; }
 
-.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion, .btnVotar {
+.btnMostrarFallas, main #contenedorFallas .falla .btnUbicacion {
   cursor: pointer;
   background-color: lightcoral;
   transition-property: background-color;
   transition-duration: 1s; }
-  .btnMostrarFallas:active, main #contenedorFallas .falla .btnUbicacion:active, .btnVotar:active {
+  .btnMostrarFallas:active, main #contenedorFallas .falla .btnUbicacion:active {
     transform: translateY(2px); }
-  .btnMostrarFallas:hover, main #contenedorFallas .falla .btnUbicacion:hover, .btnVotar:hover {
+  .btnMostrarFallas:hover, main #contenedorFallas .falla .btnUbicacion:hover {
     background-color: lightsalmon; }
 
 main, main #form, main #contenedorFallas, main #contenedorFallas .falla, .infoFalla {
@@ -81,3 +81,21 @@ main {
   .infoFalla img {
     width: 50px;
     height: 50px; }
+
+.star-rating {
+  display: inline-block; }
+  .star-rating span {
+    float: right;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    font-size: 25px;
+    color: #95A5A6;
+    text-decoration: none;
+    text-align: center;
+    transition: color .3s;
+    cursor: pointer; }
+    .star-rating span:hover {
+      color: #F39C12; }
+      .star-rating span:hover ~ span {
+        color: #F39C12; }
