@@ -26,7 +26,7 @@ export default class StarRating {
             // Get value of puntuation
             let value = star.getAttribute('value');
 
-            this.getPointsAndPaint(star, star.parentElement.children);
+            this.paintStars(star, star.parentElement.children);
 
             this.sendPuntuation(idFalla, value);
         })
@@ -37,9 +37,9 @@ export default class StarRating {
      * Colorea todas las estrellas a su izquierda del color $selected cuando se
      * hace click sobre una de ellas, las que estan a su derecha del color $normal 
      * @param {span estrella} star 
-     * @param {contenedor de todas las estrellas(span)} stars 
+     * @param {contenedor de todas las estrellas(span)} parentStars 
      */
-    getPointsAndPaint(star, stars) {
+    paintStars(star, parentStars) {
 
         let start = false;
         let selected = '#F39C12';
@@ -47,14 +47,14 @@ export default class StarRating {
 
         for (let i = 4; i >= 0; i--) {
             if (start) {
-                stars[i].style.color = normal;
+                parentStars[i].style.color = normal;
             }
-            else if (start || stars[i] === star) {
+            else if (parentStars[i] === star) {
                 start = true;
-                stars[i].style.color = selected;
+                parentStars[i].style.color = selected;
             }
             else {
-                stars[i].style.color = selected;
+                parentStars[i].style.color = selected;
             }
         }
         
@@ -67,8 +67,6 @@ export default class StarRating {
             puntuacion: points,
             ip: await this.getIp()
         }
-
-        console.log(puntuacion)
 
         new HTTPMethods().sendPuntuacion(puntuacion);
     }
