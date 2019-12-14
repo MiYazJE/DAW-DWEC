@@ -61,20 +61,16 @@ export default class StarRating {
     }
 
     async sendPuntuation(idFalla, points) {
+        
+        const httpMethods = new HTTPMethods(); 
 
         let puntuacion = {
             idFalla: idFalla,
             puntuacion: points,
-            ip: await this.getIp()
+            ip: await httpMethods.getIp()
         }
 
-        new HTTPMethods().sendPuntuacion(puntuacion);
-    }
-
-    async getIp() {
-        let data = await fetch('https://api6.ipify.org?format=json');
-        let json = await data.json();
-        return json.ip;
+        httpMethods.sendPuntuacion(puntuacion);
     }
 
 }

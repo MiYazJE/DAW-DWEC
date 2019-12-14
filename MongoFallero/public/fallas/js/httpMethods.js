@@ -20,10 +20,23 @@ export default class HTTPMethods {
         return json;
     }
 
-    async getAllPuntuaciones() {
-        let data = await fetch(this.url)
-        let json = await data.json()
-        return json;
+    /**
+     * Recibir las puntuaciones de una determinada ip
+     */
+    async getPuntuaciones() {
+        
+        let ip = await this.getIp();
+
+        let urlGet = this.url + ip; 
+
+        return fetch(urlGet)
+            .then(response => response.json())
+    }
+
+    async getIp() {
+        let data = await fetch('https://api6.ipify.org?format=json');
+        let json = await data.json();
+        return json.ip;
     }
 
 }

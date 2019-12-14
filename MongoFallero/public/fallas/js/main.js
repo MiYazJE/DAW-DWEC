@@ -3,9 +3,7 @@ import Mapa from './mapa.js';
 import HTTPMethods from './httpMethods.js';
 import StarRating from './starRating.js';
 
-const getAlldata = async () =>  {
-    console.log(await new HTTPMethods().getAllPuntuaciones())
-}
+const getAllData = () => httpMethods.getPuntuaciones();
 
 const creacionEventoBusqueda = () => {
     document.querySelector('.buscadorFalla').onchange = cargarFallas;
@@ -205,6 +203,10 @@ const initApplication = (regiones) => {
 
 const obtenerFallas = async () => {
 
+    // Obtener todas las puntuaciones de esta ip
+    puntuaciones = await getAllData();
+    console.log(puntuaciones)
+
     const response = await fetch(URL);
     const json     = await response.json();
     
@@ -221,6 +223,7 @@ const obtenerFallas = async () => {
 
 const URL = "http://mapas.valencia.es/lanzadera/opendata/Monumentos_falleros/JSON";
 let fallas;
+let puntuaciones;
 
 // Almacena => clave: idFalla, valor: ObjetoFalla
 const mapFallas = new Map();
@@ -229,5 +232,8 @@ const contenedorFallas = document.querySelector('#contenedorFallas');
 
 // Muestra la ubicación en un mapa por geolocalización
 const mapa = new Mapa('myMap');
+
+// Metodos peticiones http
+const httpMethods = new HTTPMethods();
 
 window.onload = obtenerFallas;
