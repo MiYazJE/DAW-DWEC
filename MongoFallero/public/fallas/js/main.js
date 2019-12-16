@@ -231,9 +231,6 @@ const contenedorFallas = document.querySelector('#contenedorFallas');
 // Muestra la ubicación en un mapa por geolocalización
 const mapa = new Mapa('myMap');
 
-// Metodos peticiones http
-const httpMethods = new HTTPMethods();
-
 // Clase con la lógica de las votaciones de las fallas
 const starRating = new StarRating();
 

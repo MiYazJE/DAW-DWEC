@@ -2,6 +2,10 @@ import HTTPMethods from "./httpMethods.js";
 
 export default class StarRating {
 
+    constructor() {
+        this.httMethods = new HTTPMethods();
+    }
+
     getHTML(idFalla) {
         return `
             <div idFalla="${idFalla}" class="star-rating">
@@ -20,8 +24,7 @@ export default class StarRating {
     async rellenarPuntuacionesFallas() {
 
         const puntuaciones = await this.getAllData();
-        if (puntuaciones.length == 0) return;
-    
+
         const starsParents = document.querySelectorAll('.star-rating');
 
         // Mejorar el rendimiento gracias a los métodos has y get de la clase Map
@@ -39,9 +42,9 @@ export default class StarRating {
 
     }
 
-    getAllData = () => new HTTPMethods().getPuntuaciones();
+    getAllData = async () => new HTTPMethods().getPuntuaciones(await HTTPMethods.getIp());
 
-    applyEvents() {
+    async applyEvents() {
         
         const stars = document.querySelectorAll('.star');
 
@@ -55,7 +58,17 @@ export default class StarRating {
 
             this.paintStars(value, star.parentElement.children);
 
-            this.sendPuntuation(idFalla, value);
+            this.fallaYaVotada(idFalla)
+                .then(result => {
+                    if (result.length != 0) {
+                        this.updatePuntuacion(result[0]._id, idFalla, value);
+                    }
+                    else {
+                        this.createPuntuacion(idFalla, value);
+                    }
+                })
+                .catch(err => console.error(err))
+
         })
 
     }
@@ -86,17 +99,34 @@ export default class StarRating {
         
     }
 
-    async sendPuntuation(idFalla, points) {
+    async fallaYaVotada(idFalla) {
+
+        let ip = await HTTPMethods.getIp();
+        let urlGet = ip + '/' + idFalla;
+
+        return await this.httMethods.getPuntuaciones(urlGet);
+    }
+
+    async createPuntuacion(idFalla, points) {
         
-        const httpMethods = new HTTPMethods(); 
+        let puntuacion = {
+            idFalla: idFalla,
+            puntuacion: points,
+            ip: await HTTPMethods.getIp()
+        }
+
+        this.httMethods.createPuntuacion(puntuacion);
+    }
+
+    async updatePuntuacion(idPuntuacion, idFalla, points) {
 
         let puntuacion = {
             idFalla: idFalla,
             puntuacion: points,
-            ip: await httpMethods.getIp()
+            ip: await HTTPMethods.getIp()
         }
 
-        httpMethods.sendPuntuacion(puntuacion);
+        this.httMethods.updatePuntuacion(puntuacion, idPuntuacion);
     }
 
 }
