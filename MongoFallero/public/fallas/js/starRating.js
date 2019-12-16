@@ -14,6 +14,33 @@ export default class StarRating {
         `;
     }
 
+    /**
+     * Rellenar con su respectiva puntuación a cada una de las fallas ya votadas
+     */
+    async rellenarPuntuacionesFallas() {
+
+        const puntuaciones = await this.getAllData();
+        if (puntuaciones.length == 0) return;
+    
+        const starsParents = document.querySelectorAll('.star-rating');
+
+        // Mejorar el rendimiento gracias a los métodos has y get de la clase Map
+        let mapParentStars = new Map();
+        starsParents.forEach(parentStar => {
+            mapParentStars.set(parentStar.getAttribute('idFalla'), parentStar);
+        })
+
+        puntuaciones.forEach(puntuacion => {
+            if (mapParentStars.has(puntuacion.idFalla)) {
+                let stars = mapParentStars.get(puntuacion.idFalla).children;
+                this.paintStars(puntuacion.puntuacion, stars);
+            }
+        })
+
+    }
+
+    getAllData = () => new HTTPMethods().getPuntuaciones();
+
     applyEvents() {
         
         const stars = document.querySelectorAll('.star');
@@ -26,7 +53,7 @@ export default class StarRating {
             // Get value of puntuation
             let value = star.getAttribute('value');
 
-            this.paintStars(star, star.parentElement.children);
+            this.paintStars(value, star.parentElement.children);
 
             this.sendPuntuation(idFalla, value);
         })
@@ -36,25 +63,24 @@ export default class StarRating {
     /**
      * Colorea todas las estrellas a su izquierda del color $selected cuando se
      * hace click sobre una de ellas, las que estan a su derecha del color $normal 
-     * @param {span estrella} star 
+     * @param {indice span click} indice 
      * @param {contenedor de todas las estrellas(span)} parentStars 
      */
-    paintStars(star, parentStars) {
+    paintStars(indice, parentStars) {
 
-        let start = false;
+        let pintar = true;
         let selected = '#F39C12';
         let normal   = '#95A5A6';
 
         for (let i = 4; i >= 0; i--) {
-            if (start) {
-                parentStars[i].style.color = normal;
-            }
-            else if (parentStars[i] === star) {
-                start = true;
+            if (pintar) {
                 parentStars[i].style.color = selected;
             }
             else {
-                parentStars[i].style.color = selected;
+                parentStars[i].style.color = normal;
+            }
+            if (parentStars[i].getAttribute('value') == indice) {
+                pintar = false;
             }
         }
         
